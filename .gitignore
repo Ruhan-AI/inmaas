@@ -39,3 +39,4 @@ next-env.d.ts
 /extracted_targets.json
 /download_assets.js
 /test_routes.js
+node_modules
