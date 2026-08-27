@@ -42,23 +42,32 @@ export function Header() {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center h-[76px]',
         isScrolled
           ? 'glass-header shadow-soft'
           : 'bg-transparent border-b border-transparent'
       )}
     >
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
-        {/* Exact Logo matching reference site */}
-        <Link href="/" className="group flex items-center gap-2 focus:outline-none flex-shrink-0">
-          <Image
-            src="/assets/inmaas-logo-mark.png"
-            alt="INMAAS Health Care"
-            width={220}
-            height={64}
-            className="h-14 w-auto sm:h-16 object-contain transition-transform duration-300 group-hover:scale-102"
-            priority
-          />
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        {/* Brand Logo & Wordmark */}
+        <Link href="/" className="group flex items-center gap-3 focus:outline-none flex-shrink-0">
+          <div className="relative h-11 w-11 sm:h-12 sm:w-12 flex-shrink-0">
+            <Image
+              src="/assets/inmaas-logo-mark.png"
+              alt="INMAAS Health Care Emblem"
+              fill
+              className="object-contain transition-transform duration-300 group-hover:scale-105"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-display font-extrabold text-2xl sm:text-[26px] tracking-tight text-ink leading-none">
+              INMAAS
+            </span>
+            <span className="text-[11px] tracking-[0.18em] uppercase font-bold text-brand leading-tight mt-1">
+              Health Care
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
@@ -102,7 +111,7 @@ export function Header() {
           {/* Language Switcher */}
           <button
             onClick={toggleLanguage}
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border border-border bg-white/70 hover:bg-white text-ink transition-all shadow-xs"
+            className="hidden md:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border border-border bg-white/70 hover:bg-white text-ink transition-all shadow-xs"
             aria-label="Toggle language between English and Urdu"
           >
             <Globe className="w-3.5 h-3.5 text-brand" />
@@ -112,7 +121,7 @@ export function Header() {
           {/* Contact Us Button */}
           <Link
             href="/contact"
-            className="hidden md:inline-flex items-center gap-2 bg-brand-gradient text-white rounded-full px-5 py-2 text-sm font-semibold shadow-glow hover:opacity-95 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            className="hidden md:inline-flex items-center gap-2 bg-brand-gradient text-white rounded-full px-5 py-2.5 text-sm font-semibold shadow-glow hover:opacity-95 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
             <span>{content.nav.contactUs}</span>
             <ArrowRight className={cn('w-4 h-4 transition-transform duration-200', isUrdu && 'rotate-180')} />
@@ -131,7 +140,7 @@ export function Header() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[72px] bottom-0 bg-white/95 backdrop-blur-xl z-40 border-t border-border p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden fixed inset-x-0 top-[76px] bottom-0 bg-white/95 backdrop-blur-xl z-40 border-t border-border p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col gap-2">
             {NAV_LINKS.map((link) => {
               const active = isActive(link.href);

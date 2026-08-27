@@ -34,16 +34,23 @@ export function Footer() {
       <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/15">
           {/* Col 1: Brand Logo & Bio */}
-          <div className="flex flex-col gap-4">
-            <Link href="/" className="group focus:outline-none w-fit">
-              <div className="flex items-center gap-2 rounded-2xl bg-white/10 p-3.5 backdrop-blur w-fit border border-white/10 shadow-sm transition-transform duration-300 group-hover:scale-102">
+          <div className="flex flex-col gap-5">
+            <Link href="/" className="group flex items-center gap-3.5 focus:outline-none w-fit">
+              <div className="relative h-13 w-13 sm:h-14 sm:w-14 flex-shrink-0 bg-white/10 rounded-2xl p-2.5 backdrop-blur border border-white/15 shadow-sm transition-transform duration-300 group-hover:scale-105">
                 <Image
                   src="/assets/inmaas-logo-mark.png"
-                  alt="INMAAS Health Care"
-                  width={220}
-                  height={80}
-                  className="h-16 sm:h-20 w-auto object-contain"
+                  alt="INMAAS Health Care Emblem"
+                  fill
+                  className="object-contain"
                 />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display font-extrabold text-2xl sm:text-[28px] tracking-tight text-white leading-none">
+                  INMAAS
+                </span>
+                <span className="text-xs tracking-[0.2em] uppercase font-bold text-brand-light leading-tight mt-1">
+                  Health Care
+                </span>
               </div>
             </Link>
 
