@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, Phone, MapPin, ArrowRight, Facebook, Linkedin, Instagram, Twitter } from 'lucide-react';
+import { Mail, Phone, ArrowRight, Facebook, Linkedin, Instagram, Twitter } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 import { EXTERNAL_LINKS, OFFICES, NAV_LINKS } from '@/data/constants';
 
@@ -21,60 +21,62 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-[#192E5B] text-white/90 pt-20 pb-10 mt-24 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/10">
-          {/* Col 1: Brand & Bio */}
-          <div className="flex flex-col gap-5">
-            <Link href="/" className="flex items-center gap-3 group focus:outline-none">
-              <div className="relative w-10 h-10 flex-shrink-0 bg-white rounded-xl p-1 shadow-sm">
+    <footer className="relative mt-24 overflow-hidden bg-[#1B2A4A] text-white">
+      {/* Background ambient radial gradients */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-30"
+        style={{
+          backgroundImage:
+            'radial-gradient(600px circle at 10% 0%, #3D82C7 0%, transparent 60%), radial-gradient(500px circle at 90% 100%, #B12B8E 0%, transparent 55%)',
+        }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/15">
+          {/* Col 1: Brand Logo & Bio */}
+          <div className="flex flex-col gap-4">
+            <Link href="/" className="group focus:outline-none w-fit">
+              <div className="flex items-center gap-2 rounded-2xl bg-white/10 p-3.5 backdrop-blur w-fit border border-white/10 shadow-sm transition-transform duration-300 group-hover:scale-102">
                 <Image
                   src="/assets/inmaas-logo-mark.png"
-                  alt="INMAAS Logo"
-                  fill
-                  className="object-contain p-1"
+                  alt="INMAAS Health Care"
+                  width={220}
+                  height={80}
+                  className="h-16 sm:h-20 w-auto object-contain"
                 />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-display font-bold text-xl tracking-tight text-white leading-none">
-                  INMAAS
-                </span>
-                <span className="text-[10px] tracking-wider uppercase font-semibold text-white/60 leading-tight mt-0.5">
-                  Health Care
-                </span>
               </div>
             </Link>
 
-            <p className="text-white/70 text-sm leading-relaxed">
+            <p className="text-white/80 text-sm leading-relaxed max-w-xs">
               {content.footer.tagline}
             </p>
 
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-2.5 pt-2">
               <a
                 href="#"
                 aria-label="Facebook"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 text-white/80 hover:bg-white/15 hover:text-white transition-colors"
               >
                 <Facebook className="w-4 h-4" />
               </a>
               <a
                 href="#"
                 aria-label="LinkedIn"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 text-white/80 hover:bg-white/15 hover:text-white transition-colors"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
               <a
                 href="#"
                 aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 text-white/80 hover:bg-white/15 hover:text-white transition-colors"
               >
                 <Instagram className="w-4 h-4" />
               </a>
               <a
                 href="#"
                 aria-label="Twitter"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 text-white/80 hover:bg-white/15 hover:text-white transition-colors"
               >
                 <Twitter className="w-4 h-4" />
               </a>
@@ -113,13 +115,13 @@ export function Footer() {
             <h4 className="font-display font-semibold text-white text-base tracking-wide">
               {content.footer.contactTitle}
             </h4>
-            <div className="flex flex-col gap-4 text-sm text-white/70">
+            <div className="flex flex-col gap-4 text-sm text-white/75">
               <div className="flex flex-col gap-1">
-                <span className="font-semibold text-white/90">{OFFICES.karachi.title}</span>
+                <span className="font-semibold text-white/95">{OFFICES.karachi.title}</span>
                 <p className="text-xs text-white/60 leading-relaxed">{OFFICES.karachi.address}</p>
                 <a
                   href={OFFICES.karachi.phoneTel}
-                  className="text-xs text-brand-light hover:underline mt-0.5 inline-flex items-center gap-1"
+                  className="text-xs text-brand-light hover:underline mt-0.5 inline-flex items-center gap-1.5"
                 >
                   <Phone className="w-3 h-3" />
                   <span>{OFFICES.karachi.phone}</span>
@@ -127,11 +129,11 @@ export function Footer() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <span className="font-semibold text-white/90">{OFFICES.milton.title}</span>
+                <span className="font-semibold text-white/95">{OFFICES.milton.title}</span>
                 <p className="text-xs text-white/60 leading-relaxed">{OFFICES.milton.address}</p>
                 <a
                   href={OFFICES.milton.phoneTel}
-                  className="text-xs text-brand-light hover:underline mt-0.5 inline-flex items-center gap-1"
+                  className="text-xs text-brand-light hover:underline mt-0.5 inline-flex items-center gap-1.5"
                 >
                   <Phone className="w-3 h-3" />
                   <span>{OFFICES.milton.phone}</span>

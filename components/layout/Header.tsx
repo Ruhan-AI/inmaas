@@ -42,32 +42,23 @@ export function Header() {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 h-[72px] transition-all duration-300 flex items-center',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center',
         isScrolled
           ? 'glass-header shadow-soft'
           : 'bg-transparent border-b border-transparent'
       )}
     >
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group focus:outline-none">
-          <div className="relative w-10 h-10 flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
-            <Image
-              src="/assets/inmaas-logo-mark.png"
-              alt="INMAAS Health Care Logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-display font-extrabold text-xl tracking-tight text-ink leading-none">
-              INMAAS
-            </span>
-            <span className="text-[10px] tracking-wider uppercase font-semibold text-brand-light leading-tight mt-0.5">
-              Health Care
-            </span>
-          </div>
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
+        {/* Exact Logo matching reference site */}
+        <Link href="/" className="group flex items-center gap-2 focus:outline-none flex-shrink-0">
+          <Image
+            src="/assets/inmaas-logo-mark.png"
+            alt="INMAAS Health Care"
+            width={220}
+            height={64}
+            className="h-14 w-auto sm:h-16 object-contain transition-transform duration-300 group-hover:scale-102"
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}
