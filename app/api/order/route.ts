@@ -209,9 +209,10 @@ export async function POST(request: Request) {
     }
 
     const resend = new Resend(apiKey);
+    const fromAddress = process.env.RESEND_FROM_EMAIL || 'INMAAS Orders <onboarding@resend.dev>';
 
     const emailResponse = await resend.emails.send({
-      from: 'INMAAS Orders <onboarding@resend.dev>',
+      from: fromAddress,
       to: [INMAAS_ORDERS_EMAIL],
       subject: `New Order: ${body.customerName} - ${body.city} (Rs. ${body.totalAmount.toLocaleString()})`,
       html: emailHtml,
@@ -229,12 +230,17 @@ export async function POST(request: Request) {
     // If customer provided an email address, send them an order confirmation copy as well
     if (body.email) {
       try {
-        await resend.emails.send({
-          from: 'INMAAS Health Care <onboarding@resend.dev>',
+        const custResponse = await resend.emails.send({
+          from: fromAddress,
           to: [body.email],
           subject: 'Order Confirmation — INMAAS Health Care',
           html: emailHtml,
         });
+        if (custResponse.error) {
+          console.warn(
+            '⚠️ Note on Customer Email delivery: To deliver emails to external customer addresses, verify your custom domain at https://resend.com/domains and set RESEND_FROM_EMAIL in .env.local.'
+          );
+        }
       } catch (custError) {
         console.warn('Could not send confirmation copy to customer email:', custError);
       }
