@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, Menu, X, Globe, ArrowRight } from 'lucide-react';
+import { ShoppingCart, Menu, X, Globe, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 import { NAV_LINKS } from '@/data/constants';
 import { cn } from '@/lib/utils';
@@ -117,7 +117,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 rounded-full border border-white/60 bg-white/60 px-3 py-1.5 shadow-sm backdrop-blur-md lg:flex">
+        <nav className="hidden items-center gap-5 md:gap-6 lg:gap-7 xl:gap-8 lg:flex">
           {NAV_LINKS.map((link) => {
             const active = isActive(link.href);
 
@@ -126,10 +126,10 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200',
+                  'text-[15px] transition-all duration-200',
                   active
-                    ? 'bg-[#EAF4FE] text-brand font-semibold shadow-sm'
-                    : 'text-ink-soft hover:text-ink hover:bg-black/5'
+                    ? 'rounded-full bg-[#EAF4FE] px-4 py-1.5 font-semibold text-[#0070BA] shadow-sm'
+                    : 'font-medium text-ink-soft hover:text-brand'
                 )}
               >
                 {navLabel(link.labelKey, link.defaultLabel)}
@@ -139,36 +139,32 @@ export function Header() {
         </nav>
 
         {/* Right CTA Actions */}
-        <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
-          {/* Cart Icon */}
+        <div className="flex flex-shrink-0 items-center gap-2 sm:gap-2.5 lg:gap-3">
+          {/* Cart Icon in circular card */}
           <Link
             href="/cart"
             aria-label="Shopping Cart"
-            className="tap-target relative rounded-full text-ink-soft transition-colors hover:bg-white/80 hover:text-brand"
+            className="tap-target relative flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#0070BA] shadow-sm border border-[#DCEBF9] transition-all hover:scale-105 hover:shadow-soft"
           >
-            <ShoppingBag className="h-5 w-5" />
+            <ShoppingCart className="h-4 w-4 text-[#0070BA]" />
           </Link>
 
-          {/* Language Switcher */}
+          {/* Language Switcher pill */}
           <button
             type="button"
             onClick={toggleLanguage}
-            className="tap-target hidden gap-1.5 rounded-full border border-border bg-white/70 px-3 text-xs font-semibold text-ink shadow-sm transition-all hover:bg-white sm:inline-flex lg:px-3.5"
+            className="tap-target hidden items-center justify-center rounded-full bg-[#EAF4FE] px-3.5 py-1.5 text-xs font-bold text-[#0070BA] shadow-sm transition-all hover:bg-[#DAEDFC] sm:inline-flex"
             aria-label="Toggle language between English and Urdu"
           >
-            <Globe className="h-3.5 w-3.5 flex-shrink-0 text-brand" />
             <span>{isUrdu ? 'English' : 'اردو'}</span>
           </button>
 
-          {/* Contact Us Button — desktop only, where the full nav lives */}
+          {/* Contact Us Button */}
           <Link
             href="/contact"
-            className="hidden min-h-[44px] items-center gap-2 rounded-full bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all duration-200 hover:scale-[1.02] hover:opacity-95 active:scale-[0.98] lg:inline-flex"
+            className="hidden min-h-[40px] items-center justify-center rounded-full bg-[#0070BA] px-5 py-2 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:bg-[#005EA0] hover:scale-[1.02] active:scale-[0.98] lg:inline-flex"
           >
             <span className="whitespace-nowrap">{content.nav.contactUs}</span>
-            <ArrowRight
-              className={cn('h-4 w-4 transition-transform duration-200', isUrdu && 'rotate-180')}
-            />
           </Link>
 
           {/* Mobile Menu Toggle */}
