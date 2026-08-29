@@ -424,12 +424,12 @@ export function OrderModal({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Sending Order...</span>
+                      <span>Placing Order...</span>
                     </>
                   ) : (
                     <>
                       <Send className="h-4 w-4" />
-                      <span>Submit Order</span>
+                      <span>Place Order</span>
                     </>
                   )}
                 </button>

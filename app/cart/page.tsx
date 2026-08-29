@@ -419,7 +419,7 @@ export default function CartPage() {
                   ) : (
                     <>
                       <Send className="h-4 w-4" />
-                      <span>Place Order (Send Email)</span>
+                      <span>Place Order</span>
                     </>
                   )}
                 </button>
