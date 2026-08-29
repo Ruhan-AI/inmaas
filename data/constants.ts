@@ -49,14 +49,29 @@ export const LEADERSHIP_TEAM = [
     image: '/assets/javed-ali-veesar-v2.jpg',
   },
   {
-    name: 'Mr. Syed Sagar Ali Shah',
-    role: 'Accounts & Admin Officer',
-    image: '/assets/sagar-ali-shah-v2.jpg',
+    name: 'Mr. Sarfaraz Dhamrah',
+    role: 'Sales Manager',
+    image: '/assets/sarfaraz-dhamrah.jpg',
+  },
+  {
+    name: 'Mr. Sohail Ahmed Farooqi',
+    role: 'Field Manager',
+    image: '/assets/sohail-ahmed-farooqi.jpg',
   },
   {
     name: 'Mr. Ghulam Nabi',
     role: 'Area Sales Manager',
     image: '/assets/ghulam-nabi-v2.jpg',
+  },
+  {
+    name: 'Mr. Hafiz M. Umar Shaikh',
+    role: 'Area Sales Manager',
+    image: '/assets/hafiz-umar-shaikh.png',
+  },
+  {
+    name: 'Mr. Syed Sagar Ali Shah',
+    role: 'Accounts & Admin Officer',
+    image: '/assets/sagar-ali-shah-v2.jpg',
   },
   {
     name: 'Mr. Syed Musawer Ali Shah',

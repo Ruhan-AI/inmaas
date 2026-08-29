@@ -339,20 +339,7 @@ export default function AboutPage() {
               className="mb-10 sm:mb-12 md:mb-16"
             />
 
-            {/*
-              Five people: 1-up on the smallest phones, 2-up from xs, 3-up from md
-              and 5-up from xl. The track counts are doubled (4 / 6 / 10) so each
-              card spans two columns, which lets the short trailing row be nudged
-              half a track to the right and read as centred.
-            */}
-            <div
-              className="grid grid-cols-1 xs:grid-cols-4 md:grid-cols-6 xl:grid-cols-10 gap-4 sm:gap-5 lg:gap-6
-                xs:[&>*]:col-span-2
-                xs:[&>*:nth-child(5)]:col-start-2
-                md:[&>*:nth-child(5)]:col-start-auto
-                md:[&>*:nth-child(4)]:col-start-2
-                xl:[&>*:nth-child(4)]:col-start-auto"
-            >
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {LEADERSHIP_TEAM.map((member, idx) => (
                 <div
                   key={idx}
