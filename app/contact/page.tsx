@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { MapPin, Phone, Mail, MessageSquare, Clock } from 'lucide-react';
+import { MapPin, Phone, MessageSquare } from 'lucide-react';
 import { constructMetadata } from '@/lib/metadata';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SoftCard } from '@/components/ui/SoftCard';
@@ -45,7 +45,7 @@ export default function ContactPage() {
             <SectionHeading
               eyebrow="HOW CAN WE HELP"
               title="Write to us or call directly"
-              subtitle="Send the form and we will pick the conversation up on WhatsApp, or reach either office using the details below."
+              subtitle="Send us a message using the form, or reach either office directly using the details below."
               className="mb-10 sm:mb-12 lg:mb-14"
             />
 
@@ -81,35 +81,6 @@ export default function ContactPage() {
                     </SoftCard>
                   ))}
                 </div>
-
-                {/* Email */}
-                <SoftCard className="flex flex-col gap-3 sm:gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#EAF4FE] text-brand flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-display font-bold text-lg sm:text-xl text-ink leading-snug">
-                      Email
-                    </h3>
-                  </div>
-
-                  <p className="text-sm text-ink-soft leading-relaxed">
-                    Written enquiries, documentation requests, and tender paperwork.
-                  </p>
-
-                  <a
-                    href={EXTERNAL_LINKS.emailMailto}
-                    className="inline-flex items-center gap-2 min-h-[44px] w-fit max-w-full text-sm font-bold text-brand hover:underline rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-                  >
-                    <Mail className="w-4 h-4 flex-shrink-0" />
-                    <span className="break-words">{EXTERNAL_LINKS.email}</span>
-                  </a>
-
-                  <p className="inline-flex items-start gap-2 text-xs text-ink-soft leading-relaxed">
-                    <Clock className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
-                    <span>Monday to Saturday, 9:00 AM to 6:00 PM (PKT)</span>
-                  </p>
-                </SoftCard>
 
                 {/* WhatsApp */}
                 <SoftCard hoverLift={false} className="flex flex-col gap-3 sm:gap-4">
