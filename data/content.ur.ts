@@ -16,7 +16,7 @@ export const CONTENT_UR = {
     kicker: 'DRAP APPROVED PHARMACEUTICALS',
     titleStart: 'صحت مند زندگی کے لیے ',
     titleGradient: 'سائنسی ادویات',
-    body: 'INMAAS Health Care manufactures premium syrups, tablets, capsules, and IV solutions — every product approved by DRAP to ensure the highest quality standards.',
+    body: 'INMAAS Health Care manufactures premium syrups, tablets, capsules and injections — every product approved by DRAP to ensure the highest quality standards.',
     ctaPrimary: 'Explore Products',
     ctaSecondary: 'Become a Distributor',
   },

@@ -6,7 +6,7 @@ import { ProductCatalog } from '@/components/products/ProductCatalog';
 export const metadata: Metadata = constructMetadata({
   title: 'Products — INMAAS Health Care',
   description:
-    'Browse syrups, tablets, capsules, and IV solutions by INMAAS Health Care — approved by DRAP to ensure the highest quality standards.',
+    'Browse syrups, tablets, capsules and injections by INMAAS Health Care — approved by DRAP to ensure the highest quality standards.',
   canonical: '/products',
 });
 

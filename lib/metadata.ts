@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { SITE_NAME, SITE_URL } from '@/data/constants';
 
-export const DEFAULT_OG_IMAGE =
-  'https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/60f198b6-6382-4350-90a7-00308a05d0f2/id-preview-49c9284c--75be3a20-8eae-4c20-ad69-8b84979489e7.lovable.app-1783675204503.png';
+/** Self-hosted social card. Resolved against metadataBase, so it stays correct
+ *  whichever domain the site is deployed to. */
+export const DEFAULT_OG_IMAGE = '/assets/og-inmaas.jpg';
 
 export function constructMetadata({
   title = `${SITE_NAME} — DRAP Approved Pharmaceuticals`,
-  description = 'Premium syrups, tablets, capsules and IV solutions by INMAAS Health Care — approved by DRAP to ensure the highest quality standards.',
+  description = 'Premium syrups, tablets, capsules and injections by INMAAS Health Care — approved by DRAP to ensure the highest quality standards.',
   canonical,
   noIndex = false,
 }: {

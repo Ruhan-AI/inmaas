@@ -19,26 +19,95 @@
   --shadow-soft: 0 10px 30px -12px oklch(45% 0.15 260 / 0.18);
   --shadow-elevated: 0 20px 55px -20px oklch(35% 0.15 260 / 0.35);
   --shadow-glow: 0 0 0 1px oklch(55% 0.16 260 / 0.12), 0 20px 45px -15px oklch(55% 0.16 260 / 0.35);
+
+  /* Single source of truth for the fixed header. Every sticky offset,
+     scroll-margin and drawer position is derived from this. */
+  --header-h: 60px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --header-h: 68px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 76px;
+  }
 }
 
 @layer base {
   * {
     border-color: var(--border);
+    min-width: 0;
   }
-  
+
   html {
     scroll-behavior: smooth;
     color: var(--ink);
     background-color: var(--surface);
+    /* Stop iOS Safari from inflating text in landscape. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    /* `clip` keeps position:sticky working; `hidden` is the older fallback. */
     overflow-x: hidden;
+    overflow-x: clip;
   }
 
-  [dir="rtl"] {
+  /* Anchor jumps must clear the fixed header. */
+  :target {
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+
+  [dir='rtl'] {
     font-family: var(--font-urdu), serif;
+  }
+
+  /* Media never forces the page wider than the viewport. */
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  /* Long unbroken strings (emails, URLs) wrap instead of overflowing. */
+  p,
+  li,
+  h1,
+  h2,
+  h3,
+  h4 {
+    overflow-wrap: break-word;
+  }
+}
+
+@layer components {
+  /* Consistent page gutter + max width. Use on every section's inner wrapper. */
+  .container-site {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Standard vertical rhythm for a full-width section. */
+  .section-y {
+    @apply py-14 sm:py-16 md:py-20 lg:py-24;
+  }
+
+  /* Tighter rhythm for banner/CTA bands that already have inner padding. */
+  .section-y-sm {
+    @apply py-10 sm:py-12 md:py-14 lg:py-16;
+  }
+
+  /* Comfortable 44px minimum hit area for icon-only controls on touch. */
+  .tap-target {
+    @apply inline-flex items-center justify-center;
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
@@ -50,7 +119,9 @@
 .text-brand-gradient {
   background: linear-gradient(135deg, rgb(46, 86, 166) 0%, rgb(177, 43, 142) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .bg-gold-gradient {
@@ -70,7 +141,7 @@
 }
 
 .bg-whatsapp-gradient {
-  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
 }
 
 /* Glassmorphism */
@@ -101,6 +172,8 @@
 .custom-scroll-rail {
   scrollbar-width: thin;
   scrollbar-color: rgba(46, 86, 166, 0.25) transparent;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 .custom-scroll-rail::-webkit-scrollbar {
   height: 6px;
@@ -118,7 +191,8 @@
 
 /* Subtle animations */
 @keyframes floatSlow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -132,4 +206,38 @@
 
 .animate-float-delay {
   animation: floatSlow 6s ease-in-out 3s infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.2s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-float-slow,
+  .animate-float-delay,
+  .animate-fade-in-up,
+  .animate-slide-down {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
 }

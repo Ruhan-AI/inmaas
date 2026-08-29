@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useId, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -11,59 +11,85 @@ if (typeof window !== 'undefined') {
 
 export function GlobalPresenceMap() {
   const containerRef = useRef<HTMLDivElement>(null);
+  // Per-instance ids so each ScrollTrigger can be looked up and killed on unmount.
+  const instanceId = useId();
+  const arcTriggerId = `inmaas-map-arc-${instanceId}`;
+  const dotTriggerId = `inmaas-map-dot-${instanceId}`;
 
   useGSAP(
     () => {
+      const container = containerRef.current;
+      if (!container) return;
+
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion || !containerRef.current) return;
+      if (prefersReducedMotion) return;
 
-      const path = containerRef.current.querySelector('#connectingArc') as SVGPathElement;
-      const dot = containerRef.current.querySelector('[data-map-dot]') as SVGCircleElement;
+      const path = container.querySelector<SVGPathElement>('#connectingArc');
+      const dot = container.querySelector<SVGCircleElement>('[data-map-dot]');
+      if (!path || !dot) return;
 
-      if (path && dot) {
-        const pathLength = path.getTotalLength();
+      // An unrendered path can throw, and a zero-length one returns 0/NaN —
+      // either would feed NaN into strokeDasharray and every getPointAtLength()
+      // call below. Bail out instead of animating garbage.
+      let pathLength = 0;
+      try {
+        pathLength = path.getTotalLength();
+      } catch {
+        return;
+      }
+      if (!Number.isFinite(pathLength) || pathLength <= 0) return;
 
-        // Animate arc draw
-        gsap.fromTo(
-          path,
-          { strokeDasharray: pathLength, strokeDashoffset: pathLength },
-          {
-            strokeDashoffset: 0,
-            duration: 2.2,
-            ease: 'power2.inOut',
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top 80%',
-            },
-          }
-        );
-
-        // Animate gold dot moving along path
-        const val = { progress: 0 };
-        gsap.to(val, {
-          progress: 1,
-          duration: 4,
-          repeat: -1,
-          ease: 'power1.inOut',
+      // Animate arc draw
+      const drawTween = gsap.fromTo(
+        path,
+        { strokeDasharray: pathLength, strokeDashoffset: pathLength },
+        {
+          strokeDashoffset: 0,
+          duration: 2.2,
+          ease: 'power2.inOut',
           scrollTrigger: {
-            trigger: containerRef.current,
+            id: arcTriggerId,
+            trigger: container,
             start: 'top 80%',
           },
-          onUpdate: () => {
-            const point = path.getPointAtLength(val.progress * pathLength);
-            dot.setAttribute('cx', point.x.toString());
-            dot.setAttribute('cy', point.y.toString());
-          },
-        });
-      }
+        }
+      );
+
+      // Animate gold dot moving along path
+      const val = { progress: 0 };
+      const dotTween = gsap.to(val, {
+        progress: 1,
+        duration: 4,
+        repeat: -1,
+        ease: 'power1.inOut',
+        scrollTrigger: {
+          id: dotTriggerId,
+          trigger: container,
+          start: 'top 80%',
+        },
+        onUpdate: () => {
+          const point = path.getPointAtLength(val.progress * pathLength);
+          dot.setAttribute('cx', point.x.toString());
+          dot.setAttribute('cy', point.y.toString());
+        },
+      });
+
+      // useGSAP reverts the tweens for us; kill the ScrollTriggers (and the
+      // infinite dot tween) explicitly so nothing survives an unmount.
+      return () => {
+        ScrollTrigger.getById(arcTriggerId)?.kill();
+        ScrollTrigger.getById(dotTriggerId)?.kill();
+        drawTween.kill();
+        dotTween.kill();
+      };
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [arcTriggerId, dotTriggerId] }
   );
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-[640px] aspect-[5/4] mx-auto bg-white/60 backdrop-blur-md rounded-hero p-6 border border-[#DCEBF9] shadow-soft"
+      className="relative w-full max-w-[560px] aspect-[5/4] mx-auto bg-white rounded-[28px] sm:rounded-[36px] p-4 sm:p-6 lg:p-8 border border-white/80 shadow-soft"
     >
       <svg
         viewBox="0 0 500 400"
@@ -77,7 +103,7 @@ export function GlobalPresenceMap() {
             <stop offset="100%" stopColor="#B12B8E" />
           </linearGradient>
           <radialGradient id="dotGlow">
-            <stop offset="0%" stopColor="#F5C83A" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#F5C83A" stopOpacity="0.8" />
             <stop offset="100%" stopColor="#F5C83A" stopOpacity="0" />
           </radialGradient>
         </defs>
@@ -91,16 +117,16 @@ export function GlobalPresenceMap() {
         </g>
 
         {/* Canada Location */}
-        <circle cx="120" cy="130" r="30" fill="url(#dotGlow)" />
+        <circle cx="120" cy="130" r="28" fill="url(#dotGlow)" />
         <circle cx="120" cy="130" r="7" fill="#2E56A6" />
-        <text x="120" y="95" textAnchor="middle" fill="#1D2638" fontSize="13" fontWeight="700">
+        <text x="120" y="95" textAnchor="middle" fill="#1D2638" fontSize="15" fontWeight="700">
           Canada
         </text>
 
         {/* Pakistan Location */}
-        <circle cx="380" cy="195" r="30" fill="url(#dotGlow)" />
+        <circle cx="380" cy="195" r="28" fill="url(#dotGlow)" />
         <circle cx="380" cy="195" r="7" fill="#B12B8E" />
-        <text x="380" y="240" textAnchor="middle" fill="#1D2638" fontSize="13" fontWeight="700">
+        <text x="380" y="242" textAnchor="middle" fill="#1D2638" fontSize="15" fontWeight="700">
           Pakistan
         </text>
 

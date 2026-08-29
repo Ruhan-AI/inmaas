@@ -12,7 +12,7 @@ export const CONTENT_EN = {
     kicker: 'DRAP APPROVED PHARMACEUTICALS',
     titleStart: 'Science-driven medicine for ',
     titleGradient: 'healthier lives.',
-    body: 'INMAAS Health Care manufactures premium syrups, tablets, capsules, and IV solutions — every product approved by DRAP to ensure the highest quality standards.',
+    body: 'INMAAS Health Care manufactures premium syrups, tablets, capsules and injections — every product approved by DRAP to ensure the highest quality standards.',
     ctaPrimary: 'Explore Products',
     ctaSecondary: 'Become a Distributor',
     stats: [

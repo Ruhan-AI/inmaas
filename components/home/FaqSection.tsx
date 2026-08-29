@@ -9,12 +9,12 @@ export function FaqSection() {
   const { content } = useLanguage();
 
   return (
-    <section className="py-24 bg-surface relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="section-y bg-surface relative">
+      <div className="container-site">
         <SectionHeading
           title={content.faq.title}
           subtitle={content.faq.subtitle}
-          className="mb-14"
+          className="mb-8 sm:mb-10 lg:mb-14"
         />
 
         <FaqAccordion items={content.faq.items} />

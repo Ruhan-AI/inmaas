@@ -5,8 +5,8 @@ import { SoftCard } from '@/components/ui/SoftCard';
 
 export default function NotFound() {
   return (
-    <div className="min-h-[75vh] flex items-center justify-center bg-surface py-20 px-4 sm:px-6 lg:px-8">
-      <SoftCard className="max-w-md w-full p-10 text-center flex flex-col items-center gap-6 border border-[#DCEBF9] shadow-elevated">
+    <div className="min-h-[70svh] flex items-center justify-center bg-surface py-20 px-4 sm:px-6 lg:px-8">
+      <SoftCard className="max-w-md w-full p-6 sm:p-10 text-center flex flex-col items-center gap-6 border border-[#DCEBF9] shadow-elevated">
         <div className="w-16 h-16 rounded-2xl bg-[#EAF4FE] text-brand flex items-center justify-center border border-[#D0E5FB]">
           <AlertTriangle className="w-8 h-8 text-brand" />
         </div>

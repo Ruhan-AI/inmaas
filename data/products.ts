@@ -1,155 +1,251 @@
-export type ProductCategory = 'syrup' | 'tablet' | 'capsule' | 'iv';
+export type ProductCategory = 'syrup' | 'tablet' | 'capsule' | 'injection';
+
+export interface ProductVariant {
+  /** Strength or pack size shown to the customer, e.g. "250 mg". */
+  label: string;
+  /** Maximum retail price in PKR. */
+  mrp: number;
+  /** Pack presentation for this variant, e.g. "10 Tablets". */
+  pack?: string;
+}
 
 export interface Product {
   slug: string;
   name: string;
+  /** Active ingredient / generic name as printed on the carton. */
+  generic: string;
   category: ProductCategory;
   categoryLabel: string;
+  /** Dosage form shown on the card chip, e.g. "Syrup". */
+  form: string;
   shortDescription: string;
   metaDescription: string;
+  /** Primary (WebP) artwork. */
   image: string;
+  /** JPEG fallback for the same artwork. */
+  imageFallback: string;
+  variants: ProductVariant[];
   searchTerms?: string[];
 }
 
-export const CATEGORIES: { id: ProductCategory | 'all'; label: string }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'syrup', label: 'Syrups' },
-  { id: 'tablet', label: 'Tablets' },
-  { id: 'capsule', label: 'Capsules' },
-  { id: 'iv', label: 'IV & IM Solutions' },
+export const CATEGORIES: { id: ProductCategory | 'all'; label: string; shortLabel: string }[] = [
+  { id: 'all', label: 'All', shortLabel: 'All' },
+  { id: 'syrup', label: 'Syrups', shortLabel: 'Syrups' },
+  { id: 'tablet', label: 'Tablets', shortLabel: 'Tablets' },
+  { id: 'capsule', label: 'Capsules', shortLabel: 'Capsules' },
+  { id: 'injection', label: 'Injections', shortLabel: 'Injections' },
 ];
 
 export const PRODUCTS: Product[] = [
   {
     slug: 'natocid-syrup',
-    name: 'Natocid Syrup',
+    name: 'Natocid',
+    generic: 'Antacid Suspension',
     category: 'syrup',
     categoryLabel: 'Syrups',
-    shortDescription: 'Antacid — fast relief from acidity and indigestion',
+    form: 'Syrup',
+    shortDescription: 'Fast relief from acidity and indigestion.',
     metaDescription:
-      'A smoothly-neutralising antacid suspension providing rapid, long-lasting relief from hyperacidity, heartburn, and indigestion.',
-    image: '/assets/natocid-v2.jpg',
-    searchTerms: ['natocid', 'antacid', 'syrup', 'acidity', 'indigestion', 'heartburn', 'digestive'],
+      'Natocid antacid suspension instantly neutralises excess stomach acid, giving fast, lasting relief from indigestion, dyspepsia, flatulence, bloating and gas. Sugar free and safe for daily use.',
+    image: '/assets/natocid-syrup.webp',
+    imageFallback: '/assets/natocid-syrup.jpg',
+    variants: [{ label: '120 ml', mrp: 275, pack: '120 ml Suspension' }],
+    searchTerms: [
+      'natocid', 'antacid', 'syrup', 'suspension', 'acidity', 'indigestion',
+      'heartburn', 'dyspepsia', 'bloating', 'gas', 'flatulence', 'digestive',
+    ],
   },
   {
     slug: 'newagada-syrup',
-    name: 'Newagada Syrup',
+    name: 'Newagada',
+    generic: 'Multivitamins & Minerals',
     category: 'syrup',
     categoryLabel: 'Syrups',
-    shortDescription: 'Multivitamins & Minerals — daily energy and immunity',
+    form: 'Syrup',
+    shortDescription: 'Supports daily energy and immunity.',
     metaDescription:
-      'A comprehensive multivitamin and mineral food supplement syrup formulated to support daily energy, immunity, and overall wellness for children and adults.',
-    image: '/assets/newagada-v2.jpg',
-    searchTerms: ['newagada', 'multivitamin', 'minerals', 'energy', 'immunity', 'syrup', 'vitamins'],
+      'Newagada is a complete multivitamin and mineral supplement syrup with vitamins A, C, E, B1, B2, B6, B12 and PP — formulated to support daily energy, immunity and overall wellness.',
+    image: '/assets/newagada-syrup.webp',
+    imageFallback: '/assets/newagada-syrup.jpg',
+    variants: [{ label: '120 ml', mrp: 340, pack: '120 ml Supplement' }],
+    searchTerms: [
+      'newagada', 'multivitamin', 'multivitamins', 'minerals', 'supplement',
+      'energy', 'immunity', 'syrup', 'vitamins', 'vitamin c', 'b12',
+    ],
   },
   {
     slug: 'newtizer-syrup',
-    name: 'Newtizer Syrup',
+    name: 'Newtizer',
+    generic: 'Appetizer + Multinutrient',
     category: 'syrup',
     categoryLabel: 'Syrups',
-    shortDescription: 'Appetizer — for a healthy appetite and digestion',
+    form: 'Syrup',
+    shortDescription: 'For a healthy appetite and digestion.',
     metaDescription:
-      'A herbal appetite stimulant syrup that supports healthy appetite, digestion, and general well-being — ideal for children with poor appetite.',
-    image: '/assets/newtizer-v2.jpg',
-    searchTerms: ['newtizer', 'appetizer', 'appetite', 'digestion', 'syrup', 'herbal'],
+      'Newtizer appetiser syrup combines appetite support with a multinutrient supplement to encourage a healthy appetite, better digestion and general well-being — ideal for children who eat poorly.',
+    image: '/assets/newtizer-syrup.webp',
+    imageFallback: '/assets/newtizer-syrup.jpg',
+    variants: [{ label: '120 ml', mrp: 350, pack: '120 ml Syrup' }],
+    searchTerms: [
+      'newtizer', 'appetizer', 'appetiser', 'appetite', 'digestion',
+      'multinutrient', 'supplement', 'syrup', 'children', 'kids',
+    ],
   },
   {
     slug: 'newtocare-cough-syrup',
-    name: 'Newtocare Cough Syrup',
+    name: 'Newtocare',
+    generic: 'Ivy Leaf Extract',
     category: 'syrup',
     categoryLabel: 'Syrups',
-    shortDescription: 'Ivy Leaf Extract — dual action for dry & productive cough',
+    form: 'Cough Syrup',
+    shortDescription: 'Dual action for dry and productive cough.',
     metaDescription:
-      'A herbal cough syrup with standardised Ivy Leaf Extract that relieves both dry and productive cough by loosening mucus and soothing the airways.',
-    image: '/assets/newtocare-v2.jpg',
-    searchTerms: ['newtocare', 'cough', 'ivy leaf', 'extract', 'syrup', 'mucus', 'airways'],
+      'Newtocare cough syrup with standardised Ivy Leaf Extract gives dual-action relief for dry and productive cough. Non-addictive, suitable for all seasons.',
+    image: '/assets/newtocare-syrup.webp',
+    imageFallback: '/assets/newtocare-syrup.jpg',
+    variants: [{ label: '120 ml', mrp: 240, pack: '120 ml Syrup' }],
+    searchTerms: [
+      'newtocare', 'cough', 'ivy leaf', 'ivy leaf extract', 'syrup',
+      'dry cough', 'productive cough', 'chest', 'mucus', 'airways', 'herbal',
+    ],
   },
   {
     slug: 'alfaton-d-tablet',
-    name: 'Alfaton-D Tablet',
+    name: 'Alfaton-D',
+    generic: 'Vitamin D3 10,000 IU',
     category: 'tablet',
     categoryLabel: 'Tablets',
-    shortDescription: 'Vitamin D3 100,000 IU — builds strong bones and teeth',
+    form: 'Chewable Tablet',
+    shortDescription: 'Builds strong bones and teeth.',
     metaDescription:
-      'A high-strength Vitamin D3 chewable tablet formulated to correct deficiency and support bone strength, immune health, and calcium absorption.',
-    image: '/assets/alfaton-d-v2.jpg',
-    searchTerms: ['alfaton-d', 'alfaton', 'vitamin d3', 'tablet', 'bones', 'teeth', 'calcium'],
+      'Alfaton-D chewable tablets deliver Vitamin D3 10,000 IU to correct deficiency and support bone strength, teeth, immune health and calcium absorption.',
+    image: '/assets/alfaton-d-tablet.webp',
+    imageFallback: '/assets/alfaton-d-tablet.jpg',
+    variants: [{ label: '10,000 IU', mrp: 850, pack: '30 Chewable Tablets' }],
+    searchTerms: [
+      'alfaton', 'alfaton-d', 'alfaton d', 'vitamin d', 'vitamin d3',
+      'cholecalciferol', 'chewable', 'tablet', 'bones', 'teeth', 'calcium', 'immunity',
+    ],
   },
   {
     slug: 'athlukat-tablet',
-    name: 'Athlukat Tablet',
+    name: 'Athlukat',
+    generic: 'Montelukast Sodium',
     category: 'tablet',
     categoryLabel: 'Tablets',
-    shortDescription: 'Montelukast — manages asthma and allergy symptoms',
+    form: 'Tablet & Sachet',
+    shortDescription: 'Maintains strong airways and reduces allergy symptoms.',
     metaDescription:
-      'A selective leukotriene receptor antagonist for the prophylaxis and chronic treatment of asthma and relief of seasonal allergic rhinitis.',
-    image: '/assets/athlukat-v2.jpg',
-    searchTerms: ['athlukat', 'montelukast', 'asthma', 'allergy', 'tablet', 'rhinitis'],
+      'Athlukat (Montelukast Sodium) is a leukotriene receptor antagonist for the prophylaxis and chronic management of asthma and relief of allergic rhinitis. Available as 4 mg paediatric sachets, 5 mg and 10 mg tablets.',
+    image: '/assets/athlukat-tablet.webp',
+    imageFallback: '/assets/athlukat-tablet.jpg',
+    variants: [
+      { label: '4 mg', mrp: 460, pack: '14 Sachets — paediatric oral powder' },
+      { label: '5 mg', mrp: 360, pack: '30 Tablets' },
+      { label: '10 mg', mrp: 560, pack: '21 Chewable Tablets' },
+    ],
+    searchTerms: [
+      'athlukat', 'montelukast', 'montelukast sodium', 'asthma', 'allergy',
+      'allergic rhinitis', 'airways', 'tablet', 'sachet', 'paediatric', 'pediatric',
+    ],
   },
   {
     slug: 'athpric-tablet',
-    name: 'Athpric Tablet',
+    name: 'Athpric',
+    generic: 'Ciprofloxacin USP',
     category: 'tablet',
     categoryLabel: 'Tablets',
-    shortDescription: 'Ciprofloxacin 250/500 mg — effective for bacterial infections',
+    form: 'Tablet',
+    shortDescription: 'Broad-spectrum cover for bacterial infections.',
     metaDescription:
-      'A broad-spectrum fluoroquinolone antibiotic effective against a wide range of Gram-positive and Gram-negative bacterial infections.',
-    image: '/assets/athpric-v2.jpg',
-    searchTerms: ['athpric', 'ciprofloxacin', 'antibiotic', 'bacterial', 'infections', 'tablet'],
+      'Athpric (Ciprofloxacin USP) is a broad-spectrum fluoroquinolone antibiotic effective against a wide range of Gram-positive and Gram-negative bacterial infections. Available in 250 mg and 500 mg strengths.',
+    image: '/assets/athpric-tablet.webp',
+    imageFallback: '/assets/athpric-tablet.jpg',
+    variants: [
+      { label: '250 mg', mrp: 290, pack: '10 Tablets' },
+      { label: '500 mg', mrp: 590, pack: '10 Tablets' },
+    ],
+    searchTerms: [
+      'athpric', 'ciprofloxacin', 'cipro', 'antibiotic', 'antibacterial',
+      'bacterial', 'infection', 'fluoroquinolone', 'tablet',
+    ],
   },
   {
     slug: 'evemark-capsule',
-    name: 'Evemark Softgel Capsule',
+    name: 'Evemark',
+    generic: 'Evening Primrose Oil 500 mg',
     category: 'capsule',
     categoryLabel: 'Capsules',
-    shortDescription: 'Evening Primrose Oil — skin health & hormone balance',
+    form: 'Softgel Capsule',
+    shortDescription: 'Supports fertility, skin health and hormone balance.',
     metaDescription:
-      'A premium Evening Primrose Oil softgel rich in Gamma-Linolenic Acid (GLA) that supports healthy skin, hormonal balance, and relief from PMS discomfort.',
-    image: '/assets/evemark-v2.jpg',
-    searchTerms: ['evemark', 'evening primrose oil', 'softgel', 'capsule', 'skin', 'hormone', 'gla'],
+      'Evemark softgel capsules provide 500 mg Evening Primrose Oil rich in Gamma-Linolenic Acid (GLA) to support male and female fertility, healthy skin, balanced immune response and relief from mild PMS discomfort.',
+    image: '/assets/evemark-capsule.webp',
+    imageFallback: '/assets/evemark-capsule.jpg',
+    variants: [{ label: '500 mg', mrp: 1125, pack: '20 Softgel Capsules' }],
+    searchTerms: [
+      'evemark', 'evening primrose oil', 'evening prime rose', 'primrose',
+      'gla', 'softgel', 'capsule', 'fertility', 'skin', 'hormone', 'pms',
+    ],
   },
   {
-    slug: 'fenglar-iv',
-    name: 'Fenglar Injection (IV)',
-    category: 'iv',
-    categoryLabel: 'IV & IM Solutions',
-    shortDescription: 'Ceftriaxone 250/500 mg — strong broad-spectrum defence',
+    slug: 'fenglar-injection',
+    name: 'Fenglar',
+    generic: 'Ceftriaxone',
+    category: 'injection',
+    categoryLabel: 'Injections',
+    form: 'I.M. Injection',
+    shortDescription: 'Strong broad-spectrum defence, fast-acting recovery.',
     metaDescription:
-      'A third-generation cephalosporin lyophilised powder for intravenous use, providing potent broad-spectrum antibacterial coverage and rapid clinical recovery.',
-    image: '/assets/fenglar-v2.jpg',
-    searchTerms: ['fenglar', 'ceftriaxone', 'injection', 'iv', 'im', 'antibacterial', 'hospital'],
+      'Fenglar (Ceftriaxone) is a third-generation cephalosporin lyophilised powder for injection, strictly for intramuscular (I.M.) use, delivering potent broad-spectrum antibacterial cover.',
+    image: '/assets/fenglar-injection.webp',
+    imageFallback: '/assets/fenglar-injection.jpg',
+    variants: [
+      { label: '250 mg', mrp: 199.78, pack: '1 Vial — I.M. use only' },
+      { label: '500 mg', mrp: 334.59, pack: '1 Vial — I.M. use only' },
+    ],
+    searchTerms: [
+      'fenglar', 'ceftriaxone', 'injection', 'im', 'i.m.', 'intramuscular',
+      'vial', 'antibiotic', 'antibacterial', 'cephalosporin', 'hospital',
+    ],
   },
 ];
 
-// Featured rail order from section 5 of PRD:
-// Newagada, Natocid, Newtocare, Newtizer, Athlukat, Alfaton-D, Athpric, Evemark, Fenglar
+const bySlug = (slug: string) => PRODUCTS.find((p) => p.slug === slug)!;
+
+/** Rail order: syrups first, then tablets, capsules and injections. */
 export const FEATURED_PRODUCTS: Product[] = [
-  PRODUCTS[1], // Newagada
-  PRODUCTS[0], // Natocid
-  PRODUCTS[3], // Newtocare
-  PRODUCTS[2], // Newtizer
-  PRODUCTS[5], // Athlukat
-  PRODUCTS[4], // Alfaton-D
-  PRODUCTS[6], // Athpric
-  PRODUCTS[7], // Evemark
-  PRODUCTS[8], // Fenglar
+  bySlug('newagada-syrup'),
+  bySlug('natocid-syrup'),
+  bySlug('newtocare-cough-syrup'),
+  bySlug('newtizer-syrup'),
+  bySlug('athlukat-tablet'),
+  bySlug('alfaton-d-tablet'),
+  bySlug('athpric-tablet'),
+  bySlug('evemark-capsule'),
+  bySlug('fenglar-injection'),
 ];
 
-export const CATEGORY_GROUPS = [
-  {
-    title: 'Syrups',
-    products: PRODUCTS.filter((p) => p.category === 'syrup'),
-  },
-  {
-    title: 'Tablets',
-    products: PRODUCTS.filter((p) => p.category === 'tablet'),
-  },
-  {
-    title: 'Capsules',
-    products: PRODUCTS.filter((p) => p.category === 'capsule'),
-  },
-  {
-    title: 'IV & IM Solutionss', // Preserving verified PRD quirk typo with double 's'
-    products: PRODUCTS.filter((p) => p.category === 'iv'),
-  },
+export const CATEGORY_GROUPS: { id: ProductCategory; title: string; products: Product[] }[] = [
+  { id: 'syrup', title: 'Syrups', products: PRODUCTS.filter((p) => p.category === 'syrup') },
+  { id: 'tablet', title: 'Tablets', products: PRODUCTS.filter((p) => p.category === 'tablet') },
+  { id: 'capsule', title: 'Capsules', products: PRODUCTS.filter((p) => p.category === 'capsule') },
+  { id: 'injection', title: 'Injections', products: PRODUCTS.filter((p) => p.category === 'injection') },
 ];
+
+/** Formats a PKR amount, keeping paisa only when the price actually has it. */
+export function formatPkr(amount: number): string {
+  const hasPaisa = Math.round(amount * 100) % 100 !== 0;
+  return `Rs ${amount.toLocaleString('en-PK', {
+    minimumFractionDigits: hasPaisa ? 2 : 0,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+/** "Rs 290" for a single variant, "Rs 290 – Rs 590" when strengths differ. */
+export function priceLabel(product: Product): string {
+  const prices = product.variants.map((v) => v.mrp);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  return min === max ? formatPkr(min) : `${formatPkr(min)} – ${formatPkr(max)}`;
+}

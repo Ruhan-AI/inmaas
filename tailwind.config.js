@@ -7,6 +7,16 @@ module.exports = {
     './context/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      // Small phones (iPhone SE is 375px) get their own step so two-up
+      // layouts and stat grids can breathe before `sm`.
+      xs: '420px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       colors: {
         brand: {
@@ -45,12 +55,29 @@ module.exports = {
         glow: 'var(--shadow-glow)',
       },
       borderRadius: {
-        'card': '24px',
-        'panel': '28px',
-        'hero': '32px',
+        card: '24px',
+        panel: '28px',
+        hero: '32px',
+      },
+      spacing: {
+        header: 'var(--header-h)',
+        13: '3.25rem',
+        15: '3.75rem',
       },
       maxWidth: {
-        'site': '1280px',
+        site: '1280px',
+      },
+      scale: {
+        108: '1.08',
+      },
+      keyframes: {
+        'slide-down': {
+          from: { opacity: '0', transform: 'translateY(-8px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'slide-down': 'slide-down 0.2s ease-out both',
       },
     },
   },

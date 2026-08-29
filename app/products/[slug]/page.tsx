@@ -2,7 +2,8 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PRODUCTS } from '@/data/products';
-import { ProductCatalog } from '@/components/products/ProductCatalog';
+import { SITE_NAME, SITE_URL } from '@/data/constants';
+import { ProductDetail } from '@/components/products/ProductDetail';
 import { constructMetadata } from '@/lib/metadata';
 
 interface Props {
@@ -28,10 +29,9 @@ export function generateMetadata({ params }: Props): Metadata {
   }
 
   return constructMetadata({
-    title: `${product.name} — INMAAS Health Care`,
+    title: `${product.name} (${product.generic}) — INMAAS Health Care`,
     description: product.metaDescription,
-    // Exact parity quirk from PRD: canonical points to /products
-    canonical: '/products',
+    canonical: `/products/${product.slug}`,
   });
 }
 
@@ -41,6 +41,32 @@ export default function ProductDetailPage({ params }: Props) {
     notFound();
   }
 
-  // Exact parity quirk: renders the product catalog page
-  return <ProductCatalog />;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.metaDescription,
+    category: product.categoryLabel,
+    image: `${SITE_URL}${product.imageFallback}`,
+    brand: { '@type': 'Brand', name: SITE_NAME },
+    manufacturer: { '@type': 'Organization', name: SITE_NAME },
+    offers: product.variants.map((v) => ({
+      '@type': 'Offer',
+      name: `${product.name} ${v.label}`,
+      price: v.mrp.toFixed(2),
+      priceCurrency: 'PKR',
+      availability: 'https://schema.org/InStock',
+      url: `${SITE_URL}/products/${product.slug}`,
+    })),
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProductDetail product={product} />
+    </>
+  );
 }

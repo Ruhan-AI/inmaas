@@ -40,3 +40,5 @@ next-env.d.ts
 /download_assets.js
 /test_routes.js
 node_modules
+.claude/
+

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Poppins, Inter, Montserrat, Noto_Nastaliq_Urdu } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageProvider';
@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppButton } from '@/components/layout/WhatsAppButton';
 import { constructMetadata } from '@/lib/metadata';
+import { SITE_URL } from '@/data/constants';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -37,6 +38,12 @@ const notoNastaliqUrdu = Noto_Nastaliq_Urdu({
 
 export const metadata: Metadata = constructMetadata();
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -47,9 +54,9 @@ export default function RootLayout({
     '@type': 'Organization',
     name: 'INMAAS Health Care',
     description:
-      'Premium syrups, tablets, capsules and IV solutions by INMAAS Health Care — approved by DRAP to ensure the highest quality standards.',
-    url: 'https://inmaas-nexus-web.lovable.app',
-    logo: 'https://inmaas-nexus-web.lovable.app/assets/inmaas-logo-mark-C8myYyGw.png',
+      'Premium syrups, tablets, capsules and injections by INMAAS Health Care — approved by DRAP to ensure the highest quality standards.',
+    url: SITE_URL,
+    logo: `${SITE_URL}/assets/inmaas-logo-lockup.png`,
   };
 
   return (
@@ -67,7 +74,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-surface font-sans text-ink antialiased flex flex-col selection:bg-brand-light/20 selection:text-brand-deep">
         <LanguageProvider>
           <Header />
-          <main className="flex-1 pt-[72px]">{children}</main>
+          <main className="flex-1 pt-header">{children}</main>
           <Footer />
           <WhatsAppButton />
         </LanguageProvider>

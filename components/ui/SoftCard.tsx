@@ -11,7 +11,7 @@ export function SoftCard({ children, className, hoverLift = true, ...props }: So
   return (
     <div
       className={cn(
-        'bg-white rounded-card p-6 md:p-8 border border-[#E2EDF8] shadow-soft transition-all duration-300',
+        'bg-white rounded-card p-5 sm:p-6 md:p-8 border border-[#E2EDF8] shadow-soft transition-all duration-300',
         hoverLift && 'hover:-translate-y-1 hover:shadow-elevated hover:border-brand-light/30',
         className
       )}
