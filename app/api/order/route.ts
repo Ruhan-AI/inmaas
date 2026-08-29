@@ -188,17 +188,17 @@ export async function POST(request: Request) {
     }
 
     const emailHtml = buildEmailHtml(body);
-    const apiKey = process.env.RESEND_API_KEY;
+    const apiKey = process.env.RESEND_ORDERS_API_KEY || process.env.RESEND_API_KEY;
 
     if (!apiKey) {
       console.warn(
-        '⚠️ RESEND_API_KEY is not configured in environment. Logging order inquiry to console fallback:'
+        '⚠️ RESEND_ORDERS_API_KEY is not configured in environment. Logging order inquiry to console fallback:'
       );
       console.log('Order Details:', JSON.stringify(body, null, 2));
 
       return NextResponse.json({
         success: true,
-        message: 'Order received successfully (Demo/Local Mode). Please configure RESEND_API_KEY for live delivery.',
+        message: 'Order received successfully (Demo/Local Mode). Please configure RESEND_ORDERS_API_KEY for live delivery.',
         order: {
           customerName: body.customerName,
           phone: body.phone,
@@ -209,7 +209,10 @@ export async function POST(request: Request) {
     }
 
     const resend = new Resend(apiKey);
-    const fromAddress = process.env.RESEND_FROM_EMAIL || 'INMAAS Orders <onboarding@resend.dev>';
+    const fromAddress =
+      process.env.RESEND_ORDERS_FROM_EMAIL ||
+      process.env.RESEND_FROM_EMAIL ||
+      'INMAAS Orders <onboarding@resend.dev>';
 
     const emailResponse = await resend.emails.send({
       from: fromAddress,

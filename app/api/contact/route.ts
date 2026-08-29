@@ -145,31 +145,29 @@ export async function POST(request: Request) {
     }
 
     const emailHtml = buildContactEmailHtml(body);
-    const apiKey = process.env.RESEND_API_KEY;
+    const apiKey = process.env.RESEND_CONTACT_API_KEY || process.env.RESEND_API_KEY;
 
     if (!apiKey) {
       console.warn(
-        '⚠️ RESEND_API_KEY is not configured in environment. Logging contact inquiry to console fallback:'
+        '⚠️ RESEND_CONTACT_API_KEY is not configured in environment. Logging contact inquiry to console fallback:'
       );
       console.log('Contact Message:', JSON.stringify(body, null, 2));
 
       return NextResponse.json({
         success: true,
-        message: 'Message received (Demo mode). Please configure RESEND_API_KEY for live delivery.',
+        message: 'Message received (Demo mode). Please configure RESEND_CONTACT_API_KEY for live delivery.',
       });
     }
 
     const resend = new Resend(apiKey);
-    const fromAddress = process.env.RESEND_FROM_EMAIL || 'INMAAS Contact <onboarding@resend.dev>';
-    const isSandbox = fromAddress.includes('onboarding@resend.dev');
-
-    // In Resend sandbox mode (onboarding@resend.dev), Resend only permits delivery to account email (inmaasorderspk@gmail.com).
-    // Once a custom domain is verified at resend.com/domains, it delivers directly to inmaaspk@gmail.com.
-    const recipientEmail = isSandbox ? 'inmaasorderspk@gmail.com' : INMAAS_CONTACT_EMAIL;
+    const fromAddress =
+      process.env.RESEND_CONTACT_FROM_EMAIL ||
+      process.env.RESEND_FROM_EMAIL ||
+      'INMAAS Contact <onboarding@resend.dev>';
 
     const emailResponse = await resend.emails.send({
       from: fromAddress,
-      to: [recipientEmail],
+      to: [INMAAS_CONTACT_EMAIL],
       subject: `[Contact Form] ${body.name}: ${body.subject}`,
       html: emailHtml,
       replyTo: body.email,
