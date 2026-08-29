@@ -17,6 +17,8 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SoftCard } from '@/components/ui/SoftCard';
 import { Reveal } from '@/components/ui/Reveal';
 import { EXTERNAL_LINKS, OFFICES } from '@/data/constants';
+import { DistributorHeroActions } from '@/components/distributors/DistributorHeroActions';
+import { DistributorClosingCta } from '@/components/distributors/DistributorClosingCta';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Distributor Network — INMAAS Health Care',
@@ -85,24 +87,7 @@ export default function DistributorsPage() {
             medicines to hospitals, pharmacies, and clinics across Pakistan.
           </p>
 
-          <div className="pt-3 w-full flex flex-col items-center gap-3">
-            {/* Full-width pill on phones; the label sheds " on WhatsApp" below
-                sm so the longest line still fits a 320px screen. */}
-            <a
-              href={EXTERNAL_LINKS.distributorWhatsApp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full xs:w-auto max-w-sm inline-flex items-center justify-center gap-2.5 min-h-[44px] px-5 sm:px-8 py-3.5 sm:py-4 rounded-full bg-whatsapp-gradient text-white font-display font-bold text-sm sm:text-base shadow-elevated hover:scale-[1.03] active:scale-[0.98] transition-all"
-            >
-              <MessageSquare className="w-5 h-5 flex-shrink-0" />
-              <span>
-                Become a Distributor<span className="hidden sm:inline"> on WhatsApp</span>
-              </span>
-            </a>
-            <span className="text-xs font-medium text-ink-soft max-w-full break-words">
-              Direct distributor hotline: {EXTERNAL_LINKS.pakistanPhone}
-            </span>
-          </div>
+          <DistributorHeroActions />
         </div>
       </section>
 
@@ -251,34 +236,8 @@ export default function DistributorsPage() {
               </SoftCard>
             </div>
 
-            {/* Closing WhatsApp CTA Box */}
-            <div className="bg-brand-gradient rounded-panel p-6 sm:p-10 lg:p-14 text-center text-white shadow-elevated flex flex-col items-center gap-4 sm:gap-6 max-w-4xl mx-auto">
-              <h3 className="font-display font-bold text-xl xs:text-2xl sm:text-3xl text-white leading-[1.2]">
-                Ready to become an INMAAS Distributor?
-              </h3>
-              <p className="text-white/80 text-[15px] sm:text-base max-w-xl leading-relaxed">
-                Chat with our onboarding team now to receive product catalog pricing and terms.
-              </p>
-              {/* Stacked, full-width on phones so neither pill can overflow. */}
-              <div className="w-full max-w-sm xs:max-w-none flex flex-col xs:flex-row xs:flex-wrap items-stretch xs:items-center justify-center gap-3 sm:gap-4">
-                <a
-                  href={EXTERNAL_LINKS.distributorWhatsApp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full xs:w-auto inline-flex items-center justify-center gap-2 min-h-[44px] px-6 sm:px-8 py-3.5 rounded-full bg-whatsapp-gradient text-white font-display font-bold text-sm shadow-elevated hover:scale-[1.03] active:scale-[0.98] transition-all"
-                >
-                  <MessageSquare className="w-4 h-4 flex-shrink-0" />
-                  <span>Open WhatsApp Chat</span>
-                </a>
-                <a
-                  href={EXTERNAL_LINKS.emailMailto}
-                  className="w-full xs:w-auto inline-flex items-center justify-center gap-2 min-h-[44px] px-6 sm:px-8 py-3.5 rounded-full bg-white text-brand-deep font-semibold text-sm shadow-soft hover:bg-white/90 transition-all"
-                >
-                  <Mail className="w-4 h-4 flex-shrink-0" />
-                  <span>Email Us</span>
-                </a>
-              </div>
-            </div>
+            {/* Closing WhatsApp + Email CTA Box */}
+            <DistributorClosingCta />
           </div>
         </section>
       </Reveal>
