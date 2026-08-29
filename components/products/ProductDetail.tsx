@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -9,11 +11,15 @@ import {
   ShieldCheck,
   FlaskConical,
   PackageCheck,
+  ShoppingCart,
+  Check,
+  ShoppingBag,
 } from 'lucide-react';
-import { PRODUCTS, formatPkr, type Product } from '@/data/products';
-import { EXTERNAL_LINKS } from '@/data/constants';
+import { PRODUCTS, formatPkr, type Product, type ProductVariant } from '@/data/products';
 import { SoftCard } from '@/components/ui/SoftCard';
 import { ProductCard } from '@/components/products/ProductCard';
+import { OrderModal } from '@/components/products/OrderModal';
+import { useCart } from '@/context/CartProvider';
 
 const TRUST = [
   { icon: ShieldCheck, label: 'DRAP approved' },
@@ -27,6 +33,20 @@ function whatsAppLink(product: Product) {
 }
 
 export function ProductDetail({ product }: { product: Product }) {
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [addedAnimation, setAddedAnimation] = useState(false);
+
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(product, selectedVariant.label, 1);
+    setAddedAnimation(true);
+    setTimeout(() => {
+      setAddedAnimation(false);
+    }, 2000);
+  };
+
   const related = PRODUCTS.filter(
     (p) => p.category === product.category && p.slug !== product.slug
   ).slice(0, 4);
@@ -97,7 +117,7 @@ export function ProductDetail({ product }: { product: Product }) {
               <SoftCard hoverLift={false} className="flex flex-col gap-3 p-4 sm:p-5">
                 <div className="flex items-baseline justify-between gap-3 border-b border-border/60 pb-2.5">
                   <h2 className="font-display text-sm font-bold uppercase tracking-wider text-ink">
-                    {product.variants.length > 1 ? 'Available strengths' : 'Pack & price'}
+                    {product.variants.length > 1 ? 'Select strength & pack' : 'Pack & price'}
                   </h2>
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-soft">
                     MRP
@@ -105,27 +125,41 @@ export function ProductDetail({ product }: { product: Product }) {
                 </div>
 
                 <ul className="flex flex-col divide-y divide-border/50">
-                  {product.variants.map((v) => (
-                    <li
-                      key={v.label}
-                      className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5"
-                    >
-                      <div className="flex min-w-0 flex-col">
-                        <span className="font-display text-base font-bold text-ink">{v.label}</span>
-                        {v.pack && (
-                          <span className="text-xs leading-snug text-ink-soft">{v.pack}</span>
-                        )}
-                      </div>
-                      <span className="font-numeric text-lg font-extrabold text-brand-deep">
-                        {formatPkr(v.mrp)}
-                      </span>
-                    </li>
-                  ))}
+                  {product.variants.map((v) => {
+                    const isSelected = selectedVariant.label === v.label;
+                    return (
+                      <li
+                        key={v.label}
+                        onClick={() => setSelectedVariant(v)}
+                        className={`flex cursor-pointer flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-xl p-2.5 transition-colors ${
+                          isSelected ? 'bg-[#EAF4FE] border border-[#D0E5FB]' : 'hover:bg-black/5'
+                        }`}
+                      >
+                        <div className="flex min-w-0 items-center gap-2.5">
+                          <div
+                            className={`h-4 w-4 rounded-full border flex items-center justify-center ${
+                              isSelected ? 'border-brand bg-brand text-white' : 'border-ink-soft/40'
+                            }`}
+                          >
+                            {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-display text-base font-bold text-ink">{v.label}</span>
+                            {v.pack && (
+                              <span className="text-xs leading-snug text-ink-soft">{v.pack}</span>
+                            )}
+                          </div>
+                        </div>
+                        <span className="font-numeric text-lg font-extrabold text-brand-deep">
+                          {formatPkr(v.mrp)}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <p className="text-[11px] leading-snug text-ink-soft">
-                  Maximum retail price inclusive of taxes. Prices are indicative and may vary by
-                  region and pharmacy.
+                  Maximum retail price inclusive of taxes. Forwarded directly to inmaasorderspk@gmail.com.
                 </p>
               </SoftCard>
 
@@ -139,23 +173,57 @@ export function ProductDetail({ product }: { product: Product }) {
                 ))}
               </ul>
 
-              {/* CTAs */}
-              <div className="flex flex-col gap-3 pt-1 xs:flex-row xs:flex-wrap">
+              {/* Primary Actions: Order Now & Add to Cart */}
+              <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:flex-wrap">
+                {/* 1. Buy / Order Now Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsOrderModalOpen(true)}
+                  className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2.5 rounded-full bg-[#0070BA] hover:bg-[#005EA0] px-7 py-3.5 font-display text-sm font-bold text-white shadow-soft transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <ShoppingBag className="h-4 w-4" />
+                  <span>Order Now / Enquire</span>
+                </button>
+
+                {/* 2. Add to Cart Button */}
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className={`inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-[#0070BA] px-6 py-3.5 text-sm font-semibold transition-all duration-200 sm:w-auto ${
+                    addedAnimation
+                      ? 'bg-emerald-600 text-white border-emerald-600'
+                      : 'bg-white text-[#0070BA] hover:bg-[#EAF4FE]'
+                  }`}
+                >
+                  {addedAnimation ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      <span>Added to Cart</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-4 w-4" />
+                      <span>Add to Cart</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Secondary WhatsApp & Contact links */}
+              <div className="flex items-center gap-4 pt-1 text-xs text-ink-soft">
+                <span>Or ask via:</span>
                 <a
                   href={whatsAppLink(product)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-full bg-whatsapp-gradient px-6 py-3.5 font-display text-sm font-bold text-white shadow-elevated transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] xs:w-auto"
+                  className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold hover:underline"
                 >
-                  <MessageSquare className="h-4 w-4" />
-                  <span>Enquire on WhatsApp</span>
+                  <MessageSquare className="h-3.5 w-3.5" />
+                  <span>WhatsApp</span>
                 </a>
-                <Link
-                  href="/contact"
-                  className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full border border-[#C7D9EC] bg-white/80 px-6 py-3.5 text-sm font-semibold text-brand-deep shadow-soft transition-all duration-200 hover:bg-white hover:shadow-elevated xs:w-auto"
-                >
-                  <Mail className="h-4 w-4" />
-                  <span>Contact sales</span>
+                <span>•</span>
+                <Link href="/contact" className="text-brand font-semibold hover:underline">
+                  Contact Sales
                 </Link>
               </div>
 
@@ -167,6 +235,14 @@ export function ProductDetail({ product }: { product: Product }) {
           </div>
         </div>
       </section>
+
+      {/* Order Modal */}
+      <OrderModal
+        isOpen={isOrderModalOpen}
+        onClose={() => setIsOrderModalOpen(false)}
+        product={product}
+        selectedVariant={selectedVariant}
+      />
 
       {/* Related products */}
       <section className="section-y bg-surface">

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ShoppingCart, Menu, X, Globe, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
+import { useCart } from '@/context/CartProvider';
 import { NAV_LINKS } from '@/data/constants';
 import { cn } from '@/lib/utils';
 
@@ -16,6 +17,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { language, toggleLanguage, content, isUrdu } = useLanguage();
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -143,10 +145,15 @@ export function Header() {
           {/* Cart Icon in circular card */}
           <Link
             href="/cart"
-            aria-label="Shopping Cart"
+            aria-label={`Shopping Cart ${cartCount > 0 ? `(${cartCount} items)` : ''}`}
             className="tap-target relative flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#0070BA] shadow-sm border border-[#DCEBF9] transition-all hover:scale-105 hover:shadow-soft"
           >
             <ShoppingCart className="h-4 w-4 text-[#0070BA]" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#B12B8E] px-1 text-[11px] font-extrabold text-white shadow-sm ring-2 ring-white">
+                {cartCount}
+              </span>
+            )}
           </Link>
 
           {/* Language Switcher pill */}

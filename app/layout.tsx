@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Poppins, Inter, Montserrat, Noto_Nastaliq_Urdu } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageProvider';
+import { CartProvider } from '@/context/CartProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppButton } from '@/components/layout/WhatsAppButton';
@@ -73,10 +74,12 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-surface font-sans text-ink antialiased flex flex-col selection:bg-brand-light/20 selection:text-brand-deep">
         <LanguageProvider>
-          <Header />
-          <main className="flex-1 pt-header">{children}</main>
-          <Footer />
-          <WhatsAppButton />
+          <CartProvider>
+            <Header />
+            <main className="flex-1 pt-header">{children}</main>
+            <Footer />
+            <WhatsAppButton />
+          </CartProvider>
         </LanguageProvider>
       </body>
     </html>
