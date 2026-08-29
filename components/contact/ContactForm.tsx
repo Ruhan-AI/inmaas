@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckCircle2, MessageSquare, AlertCircle } from 'lucide-react';
+import { CheckCircle2, MessageSquare, AlertCircle, Send, Loader2 } from 'lucide-react';
 import { SoftCard } from '@/components/ui/SoftCard';
-import { PrimaryButton } from '@/components/ui/Buttons';
 import { EXTERNAL_LINKS } from '@/data/constants';
 import { cn } from '@/lib/utils';
 
@@ -28,8 +27,6 @@ const EMPTY_FORM: FormValues = {
   message: '',
 };
 
-/** Shared field chrome. `min-h-[44px]` keeps every control above the WCAG
- *  touch-target floor and the focus ring matches the rest of the site. */
 const FIELD_CLASSES =
   'w-full min-h-[44px] rounded-xl bg-surface-2 border border-border px-4 py-3 text-sm text-ink transition-all focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand focus-visible:outline-none';
 
@@ -55,28 +52,12 @@ function validate(values: FormValues): FormErrors {
   return errors;
 }
 
-/** There is no backend on this site, so the form composes a WhatsApp message
- *  and hands the conversation to the INMAAS chat line. */
-function buildWhatsAppUrl(values: FormValues): string {
-  const lines = [
-    'Hello INMAAS,',
-    '',
-    `Name: ${values.name.trim()}`,
-    `Email: ${values.email.trim()}`,
-    ...(values.phone.trim() ? [`Phone: ${values.phone.trim()}`] : []),
-    `Subject: ${values.subject}`,
-    '',
-    values.message.trim(),
-  ];
-
-  const base = EXTERNAL_LINKS.primaryWhatsApp.split('?')[0];
-  return `${base}?text=${encodeURIComponent(lines.join('\n'))}`;
-}
-
 export function ContactForm() {
   const [values, setValues] = useState<FormValues>(EMPTY_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [whatsAppUrl, setWhatsAppUrl] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const setField = (field: FieldName, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
@@ -88,8 +69,9 @@ export function ContactForm() {
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setServerError(null);
 
     const nextErrors = validate(values);
     setErrors(nextErrors);
@@ -98,15 +80,43 @@ export function ContactForm() {
       return;
     }
 
-    const url = buildWhatsAppUrl(values);
-    setWhatsAppUrl(url);
-    window.open(url, '_blank', 'noopener,noreferrer');
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: values.name.trim(),
+          email: values.email.trim(),
+          phone: values.phone.trim() || undefined,
+          subject: values.subject,
+          message: values.message.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message.');
+      }
+
+      setIsSuccess(true);
+    } catch (err: any) {
+      console.error('Contact form submission error:', err);
+      setServerError(err.message || 'Something went wrong. Please try again or reach out on WhatsApp.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetForm = () => {
     setValues(EMPTY_FORM);
     setErrors({});
-    setWhatsAppUrl('');
+    setIsSuccess(false);
+    setServerError(null);
   };
 
   return (
@@ -119,56 +129,53 @@ export function ContactForm() {
           Send us a message
         </h2>
         <p className="text-sm text-ink-soft leading-relaxed">
-          Tell us what you need and we will continue the conversation on WhatsApp.
+          Tell us what you need and our team will get in touch with you shortly.
         </p>
       </div>
 
-      {/* Always mounted so the confirmation is announced; `empty:hidden` keeps
-          it from adding a stray flex gap while there is nothing to say. */}
-      <div aria-live="polite" className="empty:hidden">
-        {whatsAppUrl ? (
-          <div className="flex flex-col gap-4 rounded-2xl bg-surface-2 border border-border/80 p-4 sm:p-6">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-brand flex-shrink-0 mt-0.5" />
-              <div className="flex flex-col gap-1">
-                <p className="font-display font-bold text-base text-ink leading-snug">
-                  Your message is ready in WhatsApp
-                </p>
-                <p className="text-sm text-ink-soft leading-relaxed">
-                  Nothing has been emailed. We opened a WhatsApp chat with your details already
-                  written out — press send there and our team will reply.
-                </p>
-              </div>
+      {isSuccess ? (
+        <div className="flex flex-col gap-4 rounded-2xl bg-[#F8FBFE] border border-[#DCEBF9] p-5 sm:p-7 animate-fade-in">
+          <div className="flex items-start gap-3.5">
+            <div className="h-10 w-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200 shadow-sm flex-shrink-0 mt-0.5">
+              <CheckCircle2 className="w-6 h-6" />
             </div>
-
-            <div className="flex flex-col xs:flex-row gap-3">
-              <a
-                href={whatsAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full xs:w-auto inline-flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-full bg-whatsapp-gradient text-white font-display font-bold text-sm shadow-elevated hover:scale-[1.03] active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
-              >
-                <MessageSquare className="w-4 h-4 flex-shrink-0" />
-                <span>Open the chat again</span>
-              </a>
-              <button
-                type="button"
-                onClick={resetForm}
-                className="w-full xs:w-auto inline-flex items-center justify-center min-h-[44px] px-6 py-3 rounded-full bg-white text-brand-deep font-semibold text-sm border border-[#C7D9EC] shadow-soft hover:bg-surface-2 transition-all focus:outline-none focus:ring-2 focus:ring-brand/30"
-              >
-                Write another message
-              </button>
+            <div className="flex flex-col gap-1.5">
+              <p className="font-display font-bold text-lg text-ink leading-snug">
+                Message Sent Successfully!
+              </p>
+              <p className="text-sm text-ink-soft leading-relaxed">
+                Your message has been delivered to our official team at{' '}
+                <strong className="text-brand">inmaaspk@gmail.com</strong>. We will get back to
+                you as soon as possible.
+              </p>
             </div>
           </div>
-        ) : null}
-      </div>
 
-      {!whatsAppUrl && (
+          <div className="flex flex-col xs:flex-row gap-3 pt-2">
+            <button
+              type="button"
+              onClick={resetForm}
+              className="w-full xs:w-auto inline-flex items-center justify-center min-h-[44px] px-6 py-3 rounded-full bg-[#0070BA] text-white font-semibold text-sm shadow-soft hover:bg-[#005EA0] transition-all focus:outline-none"
+            >
+              Send another message
+            </button>
+            <a
+              href={EXTERNAL_LINKS.primaryWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full xs:w-auto inline-flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-full bg-white text-emerald-700 font-semibold text-sm border border-emerald-200 shadow-soft hover:bg-emerald-50 transition-all focus:outline-none"
+            >
+              <MessageSquare className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span>Or chat on WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      ) : (
         <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 sm:gap-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div className="flex flex-col gap-1.5 text-start">
               <label htmlFor="contact-name" className={LABEL_CLASSES}>
-                Name
+                Name <span className="text-red-500">*</span>
               </label>
               <input
                 id="contact-name"
@@ -195,7 +202,7 @@ export function ContactForm() {
 
             <div className="flex flex-col gap-1.5 text-start">
               <label htmlFor="contact-email" className={LABEL_CLASSES}>
-                Email
+                Email <span className="text-red-500">*</span>
               </label>
               <input
                 id="contact-email"
@@ -231,6 +238,7 @@ export function ContactForm() {
                 type="tel"
                 inputMode="tel"
                 autoComplete="tel"
+                placeholder="0300 1234567"
                 value={values.phone}
                 onChange={(event) => setField('phone', event.target.value)}
                 className={FIELD_CLASSES}
@@ -239,7 +247,7 @@ export function ContactForm() {
 
             <div className="flex flex-col gap-1.5 text-start">
               <label htmlFor="contact-subject" className={LABEL_CLASSES}>
-                Interest
+                Interest / Subject
               </label>
               <select
                 id="contact-subject"
@@ -259,13 +267,14 @@ export function ContactForm() {
 
           <div className="flex flex-col gap-1.5 text-start">
             <label htmlFor="contact-message" className={LABEL_CLASSES}>
-              Message
+              Message <span className="text-red-500">*</span>
             </label>
             <textarea
               id="contact-message"
               name="message"
               rows={5}
               required
+              placeholder="How can we assist you today?"
               value={values.message}
               onChange={(event) => setField('message', event.target.value)}
               aria-invalid={errors.message ? true : undefined}
@@ -287,13 +296,34 @@ export function ContactForm() {
             )}
           </div>
 
+          {serverError && (
+            <div className="flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-700">
+              <AlertCircle className="h-4 w-4 flex-shrink-0" />
+              <span>{serverError}</span>
+            </div>
+          )}
+
           <div className="flex flex-col gap-3 pt-1">
-            <PrimaryButton type="submit" showArrow={false} className="w-full sm:w-auto">
-              Send via WhatsApp
-            </PrimaryButton>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 min-h-[48px] px-8 py-3.5 rounded-full bg-[#0070BA] hover:bg-[#005EA0] text-white font-semibold text-sm shadow-soft transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Sending Message...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4" />
+                  <span>Send Message</span>
+                </>
+              )}
+            </button>
             <p className="text-xs text-ink-soft leading-relaxed">
-              Submitting opens WhatsApp with your details filled in. We do not store anything on
-              this page.
+              Your inquiry will be sent directly to our official email at{' '}
+              <strong className="text-brand">inmaaspk@gmail.com</strong>.
             </p>
           </div>
         </form>
