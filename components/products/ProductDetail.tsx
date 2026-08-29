@@ -182,7 +182,7 @@ export function ProductDetail({ product }: { product: Product }) {
                   className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2.5 rounded-full bg-[#0070BA] hover:bg-[#005EA0] px-7 py-3.5 font-display text-sm font-bold text-white shadow-soft transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <ShoppingBag className="h-4 w-4" />
-                  <span>Order Now / Enquire</span>
+                  <span>Order Now</span>
                 </button>
 
                 {/* 2. Add to Cart Button */}

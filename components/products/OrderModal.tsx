@@ -156,7 +156,7 @@ export function OrderModal({
             </div>
             <div>
               <h2 id="order-modal-title" className="font-display text-base sm:text-lg font-bold text-ink leading-tight">
-                {isSuccess ? 'Order Confirmation' : 'Place Product Order / Inquiry'}
+                {isSuccess ? 'Order Confirmation' : 'Place Order'}
               </h2>
               <p className="text-[11px] text-ink-soft">Direct delivery to inmaasorderspk@gmail.com</p>
             </div>
@@ -181,7 +181,7 @@ export function OrderModal({
               </div>
               <div className="flex flex-col gap-1.5">
                 <h3 className="font-display text-xl sm:text-2xl font-extrabold text-ink">
-                  Order Inquiry Sent!
+                  Order Placed Successfully!
                 </h3>
                 <p className="text-sm text-ink-soft max-w-sm">
                   Your order details have been securely sent to{' '}

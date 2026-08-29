@@ -100,7 +100,7 @@ export default function CartPage() {
           </div>
           <div className="flex flex-col gap-2">
             <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-ink tracking-tight">
-              Order Inquiry Placed!
+              Order Placed Successfully!
             </h1>
             <p className="text-sm text-ink-soft">
               Your cart items and delivery details have been forwarded to{' '}
