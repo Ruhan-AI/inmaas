@@ -156,10 +156,10 @@ export default function AboutPage() {
                     without compromising on quality, safety, or affordability.
                   </p>
                   <p>
-                    The inspiration behind INMAAS comes from our Founder and Chief Executive Officer,
-                    Mr. Imtiaz Shaikh, who was born and raised in Mehar, Sindh, Pakistan. Witnessing
-                    the healthcare challenges faced by ordinary people inspired him to pursue a
-                    mission of creating products that genuinely improve lives.
+                    The inspiration behind INMAAS comes from our Founder, Mr. Imtiaz Shaikh, who was
+                    born and raised in Mehar, Sindh, Pakistan. Witnessing the healthcare challenges
+                    faced by ordinary people inspired him to pursue a mission of creating products
+                    that genuinely improve lives.
                   </p>
                   <p>
                     After moving to Canada, Mr. Shaikh gained valuable international experience and
@@ -239,7 +239,7 @@ export default function AboutPage() {
                 const Icon = val.icon;
                 return (
                   <SoftCard key={idx} className="flex flex-col gap-3 sm:gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#EAF4FE] text-brand flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#EAF4FE] text-brand border border-[#D0E5FB] flex items-center justify-center flex-shrink-0">
                       <Icon className="w-6 h-6" />
                     </div>
                     <h3 className="font-display font-bold text-lg sm:text-xl text-ink">
@@ -319,7 +319,7 @@ export default function AboutPage() {
                     Mr. Imtiaz Shaikh
                   </span>
                   <span className="text-sm font-medium text-brand">
-                    Founder & Chief Executive Officer
+                    Founder
                   </span>
                 </div>
               </div>
@@ -339,26 +339,28 @@ export default function AboutPage() {
               className="mb-10 sm:mb-12 md:mb-16"
             />
 
-            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
               {LEADERSHIP_TEAM.map((member, idx) => (
                 <div
                   key={idx}
-                  className="bg-white rounded-card overflow-hidden border border-[#E2EDF8] shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 flex flex-col group"
+                  className="bg-white rounded-card p-6 sm:p-7 border border-[#E2EDF8] shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center text-center group"
                 >
-                  <div className="relative aspect-[3/4] w-full bg-slate-100 overflow-hidden">
+                  <div className="relative w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden border-[3px] border-[#2E56A6] ring-4 ring-[#EAF4FE] shadow-sm bg-slate-100 mb-4 flex-shrink-0">
                     <Image
                       src={member.image}
                       alt={member.name}
                       fill
-                      sizes="(max-width: 420px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 20vw"
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 144px, 160px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <div className="p-4 sm:p-5 flex flex-col gap-1 text-center bg-white flex-1 justify-center">
-                    <h3 className="font-display font-bold text-[15px] sm:text-base text-ink group-hover:text-brand transition-colors">
+                  <div className="flex flex-col gap-1 text-center w-full mt-1">
+                    <h3 className="font-display font-bold text-base sm:text-lg text-ink group-hover:text-brand transition-colors">
                       {member.name}
                     </h3>
-                    <span className="text-xs text-ink-soft leading-tight">{member.role}</span>
+                    <span className="text-xs sm:text-sm font-medium text-brand leading-tight">
+                      {member.role}
+                    </span>
                   </div>
                 </div>
               ))}

@@ -9,6 +9,9 @@ export interface CartItem {
   quantity: number;
 }
 
+export const FREE_DELIVERY_THRESHOLD = 3000;
+export const STANDARD_DELIVERY_FEE = 200;
+
 interface CartContextType {
   items: CartItem[];
   addToCart: (product: Product, variantLabel?: string, quantity?: number) => void;
@@ -17,6 +20,10 @@ interface CartContextType {
   clearCart: () => void;
   cartCount: number;
   cartTotal: number;
+  deliveryFee: number;
+  isFreeDelivery: boolean;
+  amountUntilFreeDelivery: number;
+  finalTotal: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -103,6 +110,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
   const cartTotal = items.reduce((acc, item) => acc + item.variant.mrp * item.quantity, 0);
+  const isFreeDelivery = cartTotal >= FREE_DELIVERY_THRESHOLD;
+  const deliveryFee = items.length === 0 ? 0 : isFreeDelivery ? 0 : STANDARD_DELIVERY_FEE;
+  const amountUntilFreeDelivery = Math.max(0, FREE_DELIVERY_THRESHOLD - cartTotal);
+  const finalTotal = cartTotal + deliveryFee;
 
   return (
     <CartContext.Provider
@@ -114,6 +125,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         clearCart,
         cartCount,
         cartTotal,
+        deliveryFee,
+        isFreeDelivery,
+        amountUntilFreeDelivery,
+        finalTotal,
       }}
     >
       {children}

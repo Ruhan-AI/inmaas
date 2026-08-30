@@ -44,7 +44,7 @@ export const CONTENT_EN = {
     title: 'Featured Products',
     subtitle: 'Formulations trusted by physicians and pharmacies.',
     viewAll: 'View All Products',
-    learnMore: 'Learn More',
+    learnMore: 'Buy Now',
   },
   whyChoose: {
     eyebrow: 'WHY CHOOSE INMAAS',

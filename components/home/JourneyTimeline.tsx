@@ -1,8 +1,23 @@
 'use client';
 
 import React from 'react';
+import {
+  FlaskConical,
+  Microscope,
+  ShieldCheck,
+  PackageCheck,
+  Truck,
+} from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 import { cn } from '@/lib/utils';
+
+const STEP_ICONS = [
+  FlaskConical,
+  Microscope,
+  ShieldCheck,
+  PackageCheck,
+  Truck,
+];
 
 export function JourneyTimeline() {
   const { content } = useLanguage();
@@ -63,9 +78,13 @@ export function JourneyTimeline() {
                     {item.step}
                   </div>
 
-                  {/* Dark Translucent Card */}
-                  <div className="w-full bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/15 transition-all duration-300 group-hover:bg-white/15 group-hover:border-white/25 flex-1 flex items-center justify-center">
-                    <h3 className="font-display font-bold text-sm sm:text-base text-white leading-snug">
+                  {/* Dark Translucent Card with Step Icon */}
+                  <div className="w-full bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/15 transition-all duration-300 group-hover:bg-white/15 group-hover:border-white/25 flex-1 flex flex-col items-center justify-center gap-2.5">
+                    {(() => {
+                      const Icon = STEP_ICONS[index] || ShieldCheck;
+                      return <Icon className="w-5 h-5 text-cyan-300 transition-transform group-hover:scale-110" />;
+                    })()}
+                    <h3 className="font-display font-bold text-xs sm:text-sm text-white leading-snug">
                       {item.title}
                     </h3>
                   </div>

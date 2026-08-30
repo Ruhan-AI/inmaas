@@ -14,13 +14,26 @@ import {
   CheckCircle2,
   AlertCircle,
   ArrowLeft,
+  Sparkles,
+  Truck,
 } from 'lucide-react';
 import { useCart } from '@/context/CartProvider';
 import { formatPkr } from '@/data/products';
 import { SoftCard } from '@/components/ui/SoftCard';
 
 export default function CartPage() {
-  const { items, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount } = useCart();
+  const {
+    items,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    cartTotal,
+    cartCount,
+    deliveryFee,
+    isFreeDelivery,
+    amountUntilFreeDelivery,
+    finalTotal,
+  } = useCart();
 
   // Checkout form states
   const [name, setName] = useState('');
@@ -65,7 +78,10 @@ export default function CartPage() {
           quantity: i.quantity,
           price: i.variant.mrp,
         })),
-        totalAmount: cartTotal,
+        subtotalAmount: cartTotal,
+        deliveryFee,
+        isFreeDelivery,
+        totalAmount: finalTotal,
       };
 
       const res = await fetch('/api/order', {
@@ -120,6 +136,27 @@ export default function CartPage() {
             <div className="flex justify-between">
               <span className="text-ink-soft">Delivery City:</span>
               <span className="font-semibold text-ink">{city}</span>
+            </div>
+            <div className="flex justify-between text-ink-soft pt-1.5 border-t border-border/40">
+              <span>Items Subtotal:</span>
+              <span className="font-semibold text-ink font-numeric">{formatPkr(cartTotal)}</span>
+            </div>
+            <div className="flex justify-between text-ink-soft">
+              <span>Delivery Charges:</span>
+              <span>
+                {isFreeDelivery ? (
+                  <>
+                    <span className="line-through text-ink-soft/70 mr-1.5 font-numeric">Rs. 200</span>
+                    <span className="font-bold text-emerald-600 uppercase">FREE</span>
+                  </>
+                ) : (
+                  <span className="font-semibold text-ink font-numeric">Rs. 200</span>
+                )}
+              </span>
+            </div>
+            <div className="flex justify-between border-t border-border/60 pt-2 font-bold text-sm">
+              <span>Total Payable:</span>
+              <span className="text-brand-deep font-numeric text-base">{formatPkr(finalTotal)}</span>
             </div>
           </div>
 
@@ -383,19 +420,58 @@ export default function CartPage() {
                   />
                 </div>
 
+                {/* Free Delivery Bar */}
+                {isFreeDelivery ? (
+                  <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-3.5 flex items-center gap-2 text-xs text-emerald-800 font-semibold mt-1">
+                    <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Congratulations! You unlocked <strong>FREE Delivery</strong> across Pakistan.</span>
+                  </div>
+                ) : (
+                  <div className="rounded-2xl bg-[#EAF4FE] border border-[#D0E5FB] p-3.5 flex flex-col gap-1.5 text-xs text-brand-deep mt-1">
+                    <div className="flex justify-between items-center font-semibold">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Truck className="h-3.5 w-3.5 text-[#0070BA] shrink-0" />
+                        <span>Add <strong>{formatPkr(amountUntilFreeDelivery)}</strong> more for <strong>FREE Delivery</strong></span>
+                      </span>
+                      <span className="font-numeric text-[11px] font-bold">{Math.round((cartTotal / 3000) * 100)}%</span>
+                    </div>
+                    <div className="w-full bg-white h-1.5 rounded-full overflow-hidden border border-[#D0E5FB]/60">
+                      <div
+                        className="bg-[#0070BA] h-full rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(100, Math.round((cartTotal / 3000) * 100))}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Pricing Breakdown */}
-                <div className="rounded-2xl bg-surface-2 p-4 border border-border/80 flex flex-col gap-2 mt-2">
+                <div className="rounded-2xl bg-surface-2 p-4 border border-border/80 flex flex-col gap-2.5">
                   <div className="flex justify-between text-xs text-ink-soft">
                     <span>Items Count:</span>
                     <span className="font-semibold text-ink">{cartCount}</span>
                   </div>
                   <div className="flex justify-between text-xs text-ink-soft">
-                    <span>Shipping / Delivery:</span>
-                    <span className="font-semibold text-emerald-600">Calculated on dispatch</span>
+                    <span>Items Subtotal:</span>
+                    <span className="font-semibold text-ink font-numeric">{formatPkr(cartTotal)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs text-ink-soft">
+                    <span>Delivery Charges:</span>
+                    <span>
+                      {isFreeDelivery ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          <span className="line-through text-ink-soft/70 font-numeric">Rs. 200</span>
+                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700 uppercase">
+                            FREE
+                          </span>
+                        </span>
+                      ) : (
+                        <span className="font-semibold text-ink font-numeric">Rs. 200</span>
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between text-base font-extrabold text-ink border-t border-border/60 pt-2">
-                    <span>Total MRP:</span>
-                    <span className="text-[#0070BA] font-numeric">{formatPkr(cartTotal)}</span>
+                    <span>Total Payable:</span>
+                    <span className="text-[#0070BA] font-numeric">{formatPkr(finalTotal)}</span>
                   </div>
                 </div>
 

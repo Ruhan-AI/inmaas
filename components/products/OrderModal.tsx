@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { X, CheckCircle2, Loader2, Send, ShoppingCart, Minus, Plus, AlertCircle } from 'lucide-react';
+import { X, CheckCircle2, Loader2, Send, ShoppingCart, Minus, Plus, AlertCircle, Truck, Sparkles, PackageCheck } from 'lucide-react';
 import type { Product, ProductVariant } from '@/data/products';
 import { formatPkr } from '@/data/products';
 
@@ -52,7 +52,7 @@ export function OrderModal({
 
   if (!isOpen) return null;
 
-  // Calculate items and total
+  // Calculate items and delivery
   const items: OrderModalItem[] = customItems
     ? customItems
     : product
@@ -68,7 +68,13 @@ export function OrderModal({
       ]
     : [];
 
-  const totalAmount = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const FREE_DELIVERY_THRESHOLD = 3000;
+  const STANDARD_DELIVERY_FEE = 200;
+  const itemsSubtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const isFreeDelivery = itemsSubtotal >= FREE_DELIVERY_THRESHOLD;
+  const deliveryFee = items.length === 0 ? 0 : isFreeDelivery ? 0 : STANDARD_DELIVERY_FEE;
+  const totalAmount = itemsSubtotal + deliveryFee;
+  const amountUntilFreeDelivery = Math.max(0, FREE_DELIVERY_THRESHOLD - itemsSubtotal);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +106,9 @@ export function OrderModal({
           address: address.trim() || undefined,
           notes: notes.trim() || undefined,
           items,
+          subtotalAmount: itemsSubtotal,
+          deliveryFee,
+          isFreeDelivery,
           totalAmount,
         }),
       });
@@ -202,9 +211,26 @@ export function OrderModal({
                   <span className="text-ink-soft">City:</span>
                   <span className="font-semibold text-ink">{city}</span>
                 </div>
+                <div className="flex justify-between text-ink-soft pt-1.5 border-t border-border/40">
+                  <span>Items Subtotal:</span>
+                  <span className="font-semibold text-ink font-numeric">{formatPkr(itemsSubtotal)}</span>
+                </div>
+                <div className="flex justify-between text-ink-soft">
+                  <span>Delivery Charges:</span>
+                  <span>
+                    {isFreeDelivery ? (
+                      <>
+                        <span className="line-through text-ink-soft/70 mr-1.5 font-numeric">Rs. 200</span>
+                        <span className="font-bold text-emerald-600 uppercase">FREE</span>
+                      </>
+                    ) : (
+                      <span className="font-semibold text-ink font-numeric">Rs. 200</span>
+                    )}
+                  </span>
+                </div>
                 <div className="flex justify-between border-t border-border/60 pt-2 font-bold text-sm">
-                  <span>Total Estimated MRP:</span>
-                  <span className="text-brand-deep">{formatPkr(totalAmount)}</span>
+                  <span>Total Payable:</span>
+                  <span className="text-brand-deep font-numeric text-base">{formatPkr(totalAmount)}</span>
                 </div>
               </div>
 
@@ -399,6 +425,53 @@ export function OrderModal({
                 </div>
               </div>
 
+              {/* Pricing & Free Delivery Summary Box */}
+              <div className="rounded-2xl bg-surface-2 p-3.5 border border-[#DCEBF9] flex flex-col gap-2.5">
+                {isFreeDelivery ? (
+                  <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-2.5 flex items-center gap-2 text-xs text-emerald-800 font-semibold">
+                    <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Congratulations! You unlocked <strong>FREE Delivery</strong> across Pakistan.</span>
+                  </div>
+                ) : (
+                  <div className="rounded-xl bg-[#EAF4FE] border border-[#D0E5FB] p-2.5 flex flex-col gap-1.5 text-xs text-brand-deep">
+                    <div className="flex justify-between items-center font-semibold">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Truck className="h-3.5 w-3.5 text-[#0070BA] shrink-0" />
+                        <span>Add <strong>{formatPkr(amountUntilFreeDelivery)}</strong> more for <strong>FREE Delivery</strong></span>
+                      </span>
+                      <span className="font-numeric text-[11px] font-bold">{Math.round((itemsSubtotal / FREE_DELIVERY_THRESHOLD) * 100)}%</span>
+                    </div>
+                    <div className="w-full bg-white h-1.5 rounded-full overflow-hidden border border-[#D0E5FB]/60">
+                      <div
+                        className="bg-[#0070BA] h-full rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(100, Math.round((itemsSubtotal / FREE_DELIVERY_THRESHOLD) * 100))}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between text-xs text-ink-soft">
+                  <span>Items Subtotal:</span>
+                  <span className="font-semibold text-ink font-numeric">{formatPkr(itemsSubtotal)}</span>
+                </div>
+
+                <div className="flex justify-between items-center text-xs text-ink-soft">
+                  <span>Delivery Charges:</span>
+                  <span>
+                    {isFreeDelivery ? (
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="line-through text-ink-soft/70 font-numeric">Rs. 200</span>
+                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700 uppercase">
+                          FREE
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="font-semibold text-ink font-numeric">Rs. 200</span>
+                    )}
+                  </span>
+                </div>
+              </div>
+
               {/* Error Alert */}
               {errorMessage && (
                 <div className="flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-700">
@@ -410,7 +483,7 @@ export function OrderModal({
               {/* Total & Submit Button */}
               <div className="flex items-center justify-between border-t border-border/60 pt-4">
                 <div className="flex flex-col">
-                  <span className="text-[11px] font-semibold text-ink-soft uppercase">Total MRP</span>
+                  <span className="text-[11px] font-semibold text-ink-soft uppercase">Total Payable</span>
                   <span className="font-numeric text-xl font-extrabold text-[#0070BA]">
                     {formatPkr(totalAmount)}
                   </span>

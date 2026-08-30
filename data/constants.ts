@@ -40,8 +40,13 @@ export const NAV_LINKS = [
 export const LEADERSHIP_TEAM = [
   {
     name: 'Mr. Imtiaz Shaikh',
-    role: 'Founder & Chief Executive Officer',
+    role: 'Founder',
     image: '/assets/imtiaz-shaikh.jpg',
+  },
+  {
+    name: 'Mr. Tahir Hussain Shaikh',
+    role: 'Chief Executive Officer',
+    image: '/assets/tahir-hussain-shaikh.jpg',
   },
   {
     name: 'Mr. Javed Ali Veesar',

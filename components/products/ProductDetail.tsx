@@ -14,11 +14,14 @@ import {
   ShoppingCart,
   Check,
   ShoppingBag,
+  Star,
 } from 'lucide-react';
 import { PRODUCTS, formatPkr, type Product, type ProductVariant } from '@/data/products';
 import { SoftCard } from '@/components/ui/SoftCard';
 import { ProductCard } from '@/components/products/ProductCard';
 import { OrderModal } from '@/components/products/OrderModal';
+import { ProductReviews } from '@/components/products/ProductReviews';
+import { getProductReviews, calculateReviewStats } from '@/data/reviews';
 import { useCart } from '@/context/CartProvider';
 
 const TRUST = [
@@ -55,6 +58,9 @@ export function ProductDetail({ product }: { product: Product }) {
     related.length > 0
       ? related
       : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 4);
+
+  const reviews = getProductReviews(product.slug);
+  const stats = calculateReviewStats(reviews);
 
   return (
     <div className="flex w-full flex-col">
@@ -98,9 +104,19 @@ export function ProductDetail({ product }: { product: Product }) {
             {/* Details */}
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
-                <span className="w-fit rounded-full border border-[#D0E5FB] bg-[#EAF4FE] px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-brand">
-                  {product.categoryLabel}
-                </span>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="w-fit rounded-full border border-[#D0E5FB] bg-[#EAF4FE] px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-brand">
+                    {product.categoryLabel}
+                  </span>
+                  <a
+                    href="#reviews"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-bold text-amber-900 transition-colors hover:bg-amber-100"
+                  >
+                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                    <span>{stats.average.toFixed(1)}</span>
+                    <span className="text-amber-800/80 font-normal">({stats.totalCount} Pakistani Reviews)</span>
+                  </a>
+                </div>
                 <h1 className="font-display text-[30px] font-extrabold leading-[1.1] tracking-tight text-ink xs:text-4xl sm:text-5xl">
                   {product.name}
                 </h1>
@@ -243,6 +259,9 @@ export function ProductDetail({ product }: { product: Product }) {
         product={product}
         selectedVariant={selectedVariant}
       />
+
+      {/* Customer & Clinical Reviews Section */}
+      <ProductReviews productSlug={product.slug} productName={product.name} />
 
       {/* Related products */}
       <section className="section-y bg-surface">

@@ -129,7 +129,7 @@ export default function QualityPage() {
                 const Icon = cred.icon;
                 return (
                   <SoftCard key={idx} className="flex flex-col gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-[#EAF4FE] text-brand flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#EAF4FE] text-brand border border-[#D0E5FB] flex items-center justify-center flex-shrink-0">
                       <Icon className="w-6 h-6" />
                     </div>
                     <h3 className="font-display font-bold text-lg sm:text-xl text-ink">
@@ -167,7 +167,9 @@ export default function QualityPage() {
                       <span className="font-numeric font-bold text-xs uppercase tracking-wider text-brand px-3 py-1 bg-[#EAF4FE] rounded-full border border-[#D0E5FB]">
                         {step.step}
                       </span>
-                      <Icon className="w-5 h-5 text-brand flex-shrink-0" />
+                      <div className="w-9 h-9 rounded-xl bg-[#EAF4FE] text-brand border border-[#D0E5FB] flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-4 h-4" />
+                      </div>
                     </div>
 
                     <h3 className="font-display font-bold text-lg sm:text-xl text-ink">

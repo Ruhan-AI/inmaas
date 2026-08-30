@@ -4,7 +4,17 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ShoppingCart, Menu, X, Globe, ArrowRight } from 'lucide-react';
+import {
+  ShoppingCart,
+  Menu,
+  X,
+  Globe,
+  ArrowRight,
+  Truck,
+  Sparkles,
+  PackageCheck,
+  Phone,
+} from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 import { useCart } from '@/context/CartProvider';
 import { NAV_LINKS } from '@/data/constants';
@@ -84,15 +94,77 @@ export function Header() {
 
   return (
     <>
-      <header
-        className={cn(
-          'fixed inset-x-0 top-0 z-50 flex h-header items-center transition-all duration-300',
-          isScrolled || mobileMenuOpen
-            ? 'glass-header shadow-soft'
-            : 'bg-transparent border-b border-transparent'
-        )}
-      >
-      <div className="container-site flex items-center justify-between gap-2">
+      <header className="fixed inset-x-0 top-0 z-50 flex flex-col transition-all duration-300">
+        {/* Continuous Announcement Ribbon */}
+        <div className="w-full overflow-hidden bg-gradient-to-r from-[#0d1b30] via-[#0070BA] to-[#0d1b30] text-white py-1.5 border-b border-white/10 text-[11px] sm:text-xs font-semibold select-none shadow-sm">
+          <div className="animate-marquee-continuous whitespace-nowrap flex items-center gap-8">
+            <div className="flex items-center gap-8 shrink-0">
+              <span className="inline-flex items-center gap-1.5">
+                <Truck className="h-3.5 w-3.5 text-cyan-300 animate-pulse" />
+                <span><strong>FREE Delivery</strong> on orders above <strong>Rs. 3,000</strong> across Pakistan!</span>
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+                <span><strong>100% DRAP Approved</strong> Formulations</span>
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <PackageCheck className="h-3.5 w-3.5 text-cyan-300" />
+                <span>Standard Delivery: <strong>Rs. 200</strong> (FREE on Rs. 3,000+)</span>
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Phone className="h-3.5 w-3.5 text-emerald-300" />
+                <span>Direct Orders: <strong>0316 2505963 / 0300 3274291</strong></span>
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Truck className="h-3.5 w-3.5 text-cyan-300" />
+                <span><strong>3,000 روپے سے زیادہ کی خریداری پر مفت ڈلیوری!</strong></span>
+              </span>
+              <span className="text-white/30">•</span>
+            </div>
+            <div className="flex items-center gap-8 shrink-0" aria-hidden="true">
+              <span className="inline-flex items-center gap-1.5">
+                <Truck className="h-3.5 w-3.5 text-cyan-300 animate-pulse" />
+                <span><strong>FREE Delivery</strong> on orders above <strong>Rs. 3,000</strong> across Pakistan!</span>
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+                <span><strong>100% DRAP Approved</strong> Formulations</span>
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <PackageCheck className="h-3.5 w-3.5 text-cyan-300" />
+                <span>Standard Delivery: <strong>Rs. 200</strong> (FREE on Rs. 3,000+)</span>
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Phone className="h-3.5 w-3.5 text-emerald-300" />
+                <span>Direct Orders: <strong>0316 2505963 / 0300 3274291</strong></span>
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Truck className="h-3.5 w-3.5 text-cyan-300" />
+                <span><strong>3,000 روپے سے زیادہ کی خریداری پر مفت ڈلیوری!</strong></span>
+              </span>
+              <span className="text-white/30">•</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Navbar Bar */}
+        <div
+          className={cn(
+            'w-full flex h-[60px] sm:h-[68px] lg:h-[72px] items-center transition-all duration-300',
+            isScrolled || mobileMenuOpen
+              ? 'glass-header shadow-soft'
+              : 'bg-white/90 backdrop-blur-md border-b border-border/40'
+          )}
+        >
+          <div className="container-site flex items-center justify-between gap-2">
         {/* Brand Logo & Wordmark */}
         <Link
           href="/"
@@ -186,6 +258,7 @@ export function Header() {
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
           </div>
+        </div>
         </div>
       </header>
 

@@ -3,14 +3,17 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 import { priceLabel, type Product } from '@/data/products';
+import { getProductReviews, calculateReviewStats } from '@/data/reviews';
 
 export function ProductCard({ product }: { product: Product }) {
   const hasStrengths = product.variants.length > 1;
+  const reviews = getProductReviews(product.slug);
+  const stats = calculateReviewStats(reviews);
 
   return (
-    /* `relative` + the stretched-link overlay on the "Learn More" anchor below
+    /* `relative` + the stretched-link overlay on the "Buy Now" anchor below
        makes the whole card clickable while keeping exactly one focusable link. */
     <article className="group relative flex h-full flex-col overflow-hidden rounded-card border border-[#E2EDF8] bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated">
       {/* Product image box */}
@@ -30,9 +33,20 @@ export function ProductCard({ product }: { product: Product }) {
       {/* Content */}
       <div className="flex flex-1 flex-col justify-between gap-3 p-4 sm:gap-4 sm:p-5 lg:p-6">
         <div className="flex flex-col gap-1.5">
-          <h3 className="font-display text-base font-bold leading-snug text-ink transition-colors group-hover:text-brand sm:text-lg">
-            {product.name}
-          </h3>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="font-display text-base font-bold leading-snug text-ink transition-colors group-hover:text-brand sm:text-lg">
+              {product.name}
+            </h3>
+            <div className="flex items-center gap-1 bg-amber-50 border border-amber-200/80 px-1.5 py-0.5 rounded-md flex-shrink-0">
+              <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
+              <span className="font-numeric text-[10px] font-bold text-amber-900">
+                {stats.average.toFixed(1)}
+              </span>
+              <span className="text-[9px] text-amber-700/70">
+                ({stats.totalCount})
+              </span>
+            </div>
+          </div>
 
           <p className="text-[11px] font-medium leading-snug text-ink-soft sm:text-xs">
             {product.generic}
@@ -66,10 +80,10 @@ export function ProductCard({ product }: { product: Product }) {
 
           <Link
             href={`/products/${product.slug}`}
-            aria-label={`Learn more about ${product.name}`}
+            aria-label={`Buy ${product.name}`}
             className="inline-flex items-center gap-1.5 rounded-full text-xs font-bold text-brand transition-colors after:absolute after:inset-0 after:content-[''] hover:text-brand-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
           >
-            <span>Learn More</span>
+            <span>Buy Now</span>
             <ArrowRight className="h-3.5 w-3.5 rtl:rotate-180" />
           </Link>
         </div>

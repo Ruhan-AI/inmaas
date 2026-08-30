@@ -34,7 +34,7 @@ export const CONTENT_UR = {
     title: 'منتخب مصنوعات',
     subtitle: 'Formulations trusted by physicians and pharmacies.',
     viewAll: 'View All Products',
-    learnMore: 'Learn More',
+    learnMore: 'Buy Now',
   },
   whyChoose: {
     ...CONTENT_EN.whyChoose,

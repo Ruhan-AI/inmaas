@@ -21,10 +21,19 @@ interface OrderPayload {
   address?: string;
   notes?: string;
   items: OrderItem[];
+  subtotalAmount?: number;
+  deliveryFee?: number;
+  isFreeDelivery?: boolean;
   totalAmount: number;
 }
 
 function buildEmailHtml(order: OrderPayload): string {
+  const itemsSubtotal =
+    order.subtotalAmount ??
+    order.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const deliveryFee = order.deliveryFee ?? (itemsSubtotal >= 3000 ? 0 : 200);
+  const isFree = itemsSubtotal >= 3000 || deliveryFee === 0;
+  const finalTotal = order.totalAmount ?? (itemsSubtotal + deliveryFee);
   const itemsHtml = order.items
     .map(
       (item) => `
@@ -143,12 +152,32 @@ function buildEmailHtml(order: OrderPayload): string {
                 ${itemsHtml}
               </tbody>
               <tfoot>
+                <tr style="border-top: 2px solid #E2EDF8;">
+                  <td colspan="3" style="padding: 10px 8px; text-align: right; font-weight: 600; font-size: 13px; color: #5B6B84;">
+                    Items Subtotal:
+                  </td>
+                  <td style="padding: 10px 8px; text-align: right; font-weight: 600; font-size: 14px; color: #1D2638;">
+                    Rs. ${itemsSubtotal.toLocaleString()}
+                  </td>
+                </tr>
                 <tr>
+                  <td colspan="3" style="padding: 6px 8px; text-align: right; font-weight: 600; font-size: 13px; color: #5B6B84;">
+                    Delivery Fee:
+                  </td>
+                  <td style="padding: 6px 8px; text-align: right; font-size: 13px;">
+                    ${
+                      isFree
+                        ? '<span style="text-decoration: line-through; color: #8C9BAE; margin-right: 6px;">Rs. 200</span><strong style="color: #10B981;">FREE (Order Rs. 3,000+)</strong>'
+                        : '<span style="color: #1D2638; font-weight: 600;">Rs. 200</span>'
+                    }
+                  </td>
+                </tr>
+                <tr style="border-top: 1px solid #E2EDF8;">
                   <td colspan="3" style="padding: 14px 8px; text-align: right; font-weight: 700; font-size: 15px; color: #1D2638;">
-                    Total Estimated Amount:
+                    Total Payable Amount:
                   </td>
                   <td style="padding: 14px 8px; text-align: right; font-weight: 800; font-size: 18px; color: #0070BA;">
-                    Rs. ${order.totalAmount.toLocaleString()}
+                    Rs. ${finalTotal.toLocaleString()}
                   </td>
                 </tr>
               </tfoot>

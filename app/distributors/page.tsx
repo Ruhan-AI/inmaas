@@ -107,7 +107,7 @@ export default function DistributorsPage() {
                 const Icon = item.icon;
                 return (
                   <SoftCard key={idx} className="flex flex-col gap-3 sm:gap-4">
-                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#EAF4FE] text-brand flex items-center justify-center flex-shrink-0">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#EAF4FE] text-brand border border-[#D0E5FB] flex items-center justify-center flex-shrink-0">
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                     <h3 className="font-display font-bold text-lg sm:text-xl text-ink leading-snug">
@@ -130,7 +130,7 @@ export default function DistributorsPage() {
               {/* Coverage Areas */}
               <SoftCard className="p-5 sm:p-8 lg:p-10 flex flex-col gap-5 sm:gap-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#EAF4FE] text-brand flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#EAF4FE] text-brand border border-[#D0E5FB] flex items-center justify-center flex-shrink-0">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <h3 className="font-display font-bold text-xl sm:text-2xl text-ink leading-snug">

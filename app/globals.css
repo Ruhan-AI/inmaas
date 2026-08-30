@@ -20,20 +20,19 @@
   --shadow-elevated: 0 20px 55px -20px oklch(35% 0.15 260 / 0.35);
   --shadow-glow: 0 0 0 1px oklch(55% 0.16 260 / 0.12), 0 20px 45px -15px oklch(55% 0.16 260 / 0.35);
 
-  /* Single source of truth for the fixed header. Every sticky offset,
-     scroll-margin and drawer position is derived from this. */
-  --header-h: 60px;
+  /* Single source of truth for the fixed header (ribbon + navbar). */
+  --header-h: 92px;
 }
 
 @media (min-width: 640px) {
   :root {
-    --header-h: 68px;
+    --header-h: 100px;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --header-h: 76px;
+    --header-h: 106px;
   }
 }
 
@@ -221,6 +220,25 @@
 
 .animate-fade-in-up {
   animation: fadeInUp 0.2s ease-out both;
+}
+
+@keyframes marqueeContinuous {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-continuous {
+  display: flex;
+  width: max-content;
+  animation: marqueeContinuous 28s linear infinite;
+}
+
+.animate-marquee-continuous:hover {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
