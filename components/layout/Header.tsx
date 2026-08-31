@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 import { useCart } from '@/context/CartProvider';
-import { NAV_LINKS } from '@/data/constants';
+import { NAV_LINKS, OFFICES } from '@/data/constants';
 import { cn } from '@/lib/utils';
 
 const MOBILE_NAV_ID = 'mobile-nav-drawer';
@@ -116,7 +116,9 @@ export function Header() {
               <span className="text-white/30">•</span>
               <span className="inline-flex items-center gap-1.5">
                 <Phone className="h-3.5 w-3.5 text-emerald-300" />
-                <span>Direct Orders: <strong>0316 2505963 / 0300 3274291</strong></span>
+                <span>
+                  Karachi: <a href={OFFICES.karachi.phoneTel} className="font-bold underline-offset-2 hover:underline">{OFFICES.karachi.phone}</a> | Milton: <a href={OFFICES.milton.phoneTel} className="font-bold underline-offset-2 hover:underline">{OFFICES.milton.phone}</a>
+                </span>
               </span>
               <span className="text-white/30">•</span>
               <span className="inline-flex items-center gap-1.5">
@@ -143,7 +145,9 @@ export function Header() {
               <span className="text-white/30">•</span>
               <span className="inline-flex items-center gap-1.5">
                 <Phone className="h-3.5 w-3.5 text-emerald-300" />
-                <span>Direct Orders: <strong>0316 2505963 / 0300 3274291</strong></span>
+                <span>
+                  Karachi: <a href={OFFICES.karachi.phoneTel} className="font-bold underline-offset-2 hover:underline">{OFFICES.karachi.phone}</a> | Milton: <a href={OFFICES.milton.phoneTel} className="font-bold underline-offset-2 hover:underline">{OFFICES.milton.phone}</a>
+                </span>
               </span>
               <span className="text-white/30">•</span>
               <span className="inline-flex items-center gap-1.5">
